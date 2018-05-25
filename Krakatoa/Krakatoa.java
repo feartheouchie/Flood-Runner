@@ -67,10 +67,6 @@ public class Krakatoa extends JFrame {
 	 ImageIcon pic = new ImageIcon("background2.gif");
 	 ImageIcon [] jogger = {
 		 new ImageIcon("Jogging01.png"),
-		 new ImageIcon("Jogging02.png"),
-		 new ImageIcon("Jogging03.png"),
-		 new ImageIcon("Jogging04.png"),
-		 new ImageIcon("Jogging05.png"),
 		 new ImageIcon("Jogging06.png"),
 		 new ImageIcon("Jogging07.png"),
 		 new ImageIcon("Jogging08.png"),
@@ -94,8 +90,10 @@ public class Krakatoa extends JFrame {
 	}				 
     public void keyPressed( KeyEvent ev ) {
 		System.out.println(ev.getKeyCode() );
-		// if (ev.getKeyCode()==65)
-			// x-=10;
+		if (ev.getKeyCode()==38 && y==0){
+			isjump = true;
+			jump = x;
+		}	
 	}	
     public void keyReleased( KeyEvent e ){		
 	}
@@ -104,6 +102,13 @@ public class Krakatoa extends JFrame {
     public void actionPerformed( ActionEvent e ){ 
         if (e.getSource()==myTimer){
 		   x++;	
+		   if (isjump){
+			y = 20*(x-jump) - (x-jump)*(x-jump);
+			if (y < 0){
+				isjump = false;
+				y = 0;
+			}
+		}
 		// timer events
         repaint();		
 		}
@@ -131,17 +136,12 @@ public class Krakatoa extends JFrame {
 	
 	
 	// end actionPerformed
-	
+	 
 	
   public void paintComponent(Graphics gr){  // painting
 		super.paintComponent(gr);
-		if (isjump){
-			y = 20*(x-jump) - (x-jump)*(x-jump);
-			if (y < 0){
-				isjump = false;
-				y = 0;
-			}
-		}
+		
+	
 
 		gr.drawImage(pic.getImage(),600-(x+1656)*5%3312, 0, null );
 		gr.drawImage(pic.getImage(),600-x*5%3312, 0, null );
@@ -149,7 +149,7 @@ public class Krakatoa extends JFrame {
 		gr.fillRect(600-x*10%720,300,120,60);
 		gr.setColor(Color.yellow);
 		if (y == 0)
-			gr.drawImage(jogger[x%13].getImage(),120,212-y,null);
+			gr.drawImage(jogger[x%8+1].getImage(),120,212-y,null);
 		else
 			gr.drawImage(jogger[0].getImage(),120,212-y,null);
 
