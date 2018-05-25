@@ -154,4 +154,4 @@ public class Krakatoa extends JFrame {
 			gr.drawImage(jogger[0].getImage(),120,212-y,null);
 
 	}
-					 }
+}
