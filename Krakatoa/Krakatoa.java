@@ -60,24 +60,32 @@ public class Krakatoa extends JFrame {
    } 
 }
  class MyPanel extends JPanel implements ActionListener, KeyListener {
-	 //variables - they are all global
-	 int x;
-	 int jump = 0;
-	 int y = 0;
-	 boolean isjump = false;
-	 boolean isPaused = false;
-	 ImageIcon pic = new ImageIcon("background2.gif");
-	 ImageIcon [] jogger = {
-		 new ImageIcon("Jogging01.png"),
-		 new ImageIcon("Jogging06.png"),
-		 new ImageIcon("Jogging07.png"),
-		 new ImageIcon("Jogging08.png"),
-		 new ImageIcon("Jogging09.png"),
-		 new ImageIcon("Jogging10.png"),
-		 new ImageIcon("Jogging11.png"),
-		 new ImageIcon("Jogging12.png"),
-		 new ImageIcon("Jogging13.png"),
+	//variables - they are all global
+	int x;
+	int jump = 0;
+	int y = 0;
+	boolean isjump = false;
+	boolean isPaused = false;
+	ImageIcon pic = new ImageIcon("background2.gif");
+	ImageIcon [] jogger = {
+		new ImageIcon("Jogging01.png"),
+		new ImageIcon("Jogging06.png"),
+		new ImageIcon("Jogging07.png"),
+		new ImageIcon("Jogging08.png"),
+		new ImageIcon("Jogging09.png"),
+		new ImageIcon("Jogging10.png"),
+		new ImageIcon("Jogging11.png"),
+		new ImageIcon("Jogging12.png"),
+		new ImageIcon("Jogging13.png"),
 	 };
+	 
+	ImageIcon [] jumping = {
+		new ImageIcon("Jumping01.png"),
+		new ImageIcon("Jumping02.png"),
+		new ImageIcon("Jumping03.png"),
+		new ImageIcon("Jumping04.png"),
+		new ImageIcon("Jumping05.png"),
+	};
 	 
 	 
 	private Timer myTimer= new Timer( 60, this );
@@ -91,7 +99,7 @@ public class Krakatoa extends JFrame {
 		myTimer.start();
 	}				 
     public void keyPressed( KeyEvent ev ) {
-		System.out.println(ev.getKeyCode() );
+		//System.out.println(ev.getKeyCode() ); Do we still need this?
 		if (ev.getKeyCode()==38 && y==0){
 			isjump = true;
 			jump = x;
@@ -143,7 +151,6 @@ public class Krakatoa extends JFrame {
   public void paintComponent(Graphics gr){  // painting
 		super.paintComponent(gr);
 		
-	
 
 		gr.drawImage(pic.getImage(),600-(x+1656)*5%3312, 0, null );
 		gr.drawImage(pic.getImage(),600-x*5%3312, 0, null );
@@ -153,7 +160,7 @@ public class Krakatoa extends JFrame {
 		if (y == 0)
 			gr.drawImage(jogger[x%8+1].getImage(),120,212-y,null);
 		else
-			gr.drawImage(jogger[0].getImage(),120,212-y,null);
+			gr.drawImage(jumping[0].getImage(),120,212-y,null);
 
 	}
 }
