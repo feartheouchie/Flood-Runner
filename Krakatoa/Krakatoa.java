@@ -15,46 +15,46 @@ public class Krakatoa extends JFrame {
    private JButton exit = new JButton("Exit");          //label on action buttons
 
 
-   public Krakatoa()   {
-      super( "Button Template" );
+	public Krakatoa()   {
+		super( "Button Template" );
 
-      southPanel.setLayout(new GridLayout(1,3));
+		southPanel.setLayout(new GridLayout(1,3));
 
-      c = getContentPane();
-      c.setLayout( new BorderLayout() );
+		c = getContentPane();
+		c.setLayout( new BorderLayout() );
 
-      // create and add buttons
-     
-	
-	  actionBtn1.addActionListener( mainPanel );
-	  actionBtn1.addKeyListener(mainPanel);
-	  southPanel.add(actionBtn1);
-	  actionBtn2.addActionListener( mainPanel );
-	  actionBtn2.addKeyListener(mainPanel);
-	  southPanel.add(actionBtn2);
-	  exit.addActionListener( mainPanel );
-	  exit.addKeyListener(mainPanel);
-	  southPanel.add(exit);
-	  addKeyListener(mainPanel);
-	  
-	  c.add( southPanel, BorderLayout.SOUTH );
-	  c.add( mainPanel, BorderLayout.CENTER  );
-      setSize( 600, 600 );                          //size of the window, can be changed
-      setVisible(true);
+		// create and add buttons
+
+
+		actionBtn1.addActionListener( mainPanel );
+		actionBtn1.addKeyListener(mainPanel);
+		southPanel.add(actionBtn1);
+		actionBtn2.addActionListener( mainPanel );
+		actionBtn2.addKeyListener(mainPanel);
+		southPanel.add(actionBtn2);
+		exit.addActionListener( mainPanel );
+		exit.addKeyListener(mainPanel);
+		southPanel.add(exit);
+		addKeyListener(mainPanel);
+
+		c.add( southPanel, BorderLayout.SOUTH );
+		c.add( mainPanel, BorderLayout.CENTER  );
+		setSize( 600, 600 );                          //size of the window, can be changed
+		setVisible(true);
    }
 
   
          
   
-   public static void main( String args[] ) {
-      Krakatoa app = new Krakatoa();
+    public static void main( String args[] ) {
+        Krakatoa app = new Krakatoa();
 
-      app.addWindowListener(
-         new WindowAdapter() {
-            public void windowClosing( WindowEvent e )
-            {
-               System.exit( 0 );
-            }
+        app.addWindowListener(
+            new WindowAdapter() {
+                public void windowClosing( WindowEvent e )
+                {
+                   System.exit( 0 );
+				}
          }
       );
    } 
@@ -63,10 +63,13 @@ public class Krakatoa extends JFrame {
 	//variables - they are all global
 	int x;
 	int jump = 0;
+	int jumpSprite = 0;
 	int y = 0;
+	int jumpLength = 60; //Jump is 20 frames long
 	boolean isjump = false;
 	boolean isPaused = false;
 	ImageIcon pic = new ImageIcon("background2.gif");
+	
 	ImageIcon [] jogger = {
 		new ImageIcon("Jogging01.png"),
 		new ImageIcon("Jogging06.png"),
@@ -77,8 +80,7 @@ public class Krakatoa extends JFrame {
 		new ImageIcon("Jogging11.png"),
 		new ImageIcon("Jogging12.png"),
 		new ImageIcon("Jogging13.png"),
-	 };
-	 
+	 }; 
 	ImageIcon [] jumping = {
 		new ImageIcon("Jumping01.png"),
 		new ImageIcon("Jumping02.png"),
@@ -86,8 +88,8 @@ public class Krakatoa extends JFrame {
 		new ImageIcon("Jumping04.png"),
 		new ImageIcon("Jumping05.png"),
 	};
-	 
-	 
+	
+	
 	private Timer myTimer= new Timer( 60, this );
 	 
 	public  MyPanel() { 			//initial all the variables
@@ -99,7 +101,7 @@ public class Krakatoa extends JFrame {
 		myTimer.start();
 	}				 
     public void keyPressed( KeyEvent ev ) {
-		//System.out.println(ev.getKeyCode() ); Do we still need this?
+		//System.out.println(ev.getKeyCode() ); 		Do we still need this?
 		if (ev.getKeyCode()==38 && y==0){
 			isjump = true;
 			jump = x;
@@ -111,9 +113,25 @@ public class Krakatoa extends JFrame {
 	
     public void actionPerformed( ActionEvent e ){ 
         if (e.getSource()==myTimer){
-		   x++;	
-		   if (isjump){
-			y = 20*(x-jump) - (x-jump)*(x-jump);
+			x++;
+		    if (isjump){
+				y = 20*(x-jump) - (x-jump)*(x-jump);
+				if ((x-jump)/jumpLength < 1/6){
+					jumpSprite = 0;
+				}
+				else if ((x-jump)/jumpLength < 1/3){
+					jumpSprite = 1;
+				}
+				else if ((x-jump)/jumpLength < 1/2){
+					jumpSprite = 2;
+				}
+				else if ((x-jump)/jumpLength < 2/3){
+					jumpSprite = 3;
+				}
+				else if ((x-jump)/jumpLength >= 2/3){
+					jumpSprite = 4;
+				}
+				
 			if (y < 0){
 				isjump = false;
 				y = 0;
@@ -122,6 +140,8 @@ public class Krakatoa extends JFrame {
 		// timer events
         repaint();		
 		}
+		
+		//Buttons
 		else{
 			JButton b= (JButton)e.getSource();	   
 			if (b.getText()=="Jump" && y == 0){
@@ -148,7 +168,7 @@ public class Krakatoa extends JFrame {
 	// end actionPerformed
 	 
 	
-  public void paintComponent(Graphics gr){  // painting
+	public void paintComponent(Graphics gr){  // painting
 		super.paintComponent(gr);
 		
 
@@ -160,7 +180,7 @@ public class Krakatoa extends JFrame {
 		if (y == 0)
 			gr.drawImage(jogger[x%8+1].getImage(),120,212-y,null);
 		else
-			gr.drawImage(jumping[0].getImage(),120,212-y,null);
+			gr.drawImage(jumping[jumpSprite].getImage(),120,212-y,null);
 
 	}
 }
