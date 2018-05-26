@@ -88,7 +88,9 @@ public class Krakatoa extends JFrame {
 		new ImageIcon("Jumping04.png"),
 		new ImageIcon("Jumping05.png"),
 	};
-	
+	ImageIcon [] platforms = {
+		new ImageIcon("Platform1.png")
+	};
 	
 	private Timer myTimer= new Timer( 60, this );
 	 
@@ -116,19 +118,19 @@ public class Krakatoa extends JFrame {
 			x++;
 		    if (isjump){
 				y = 20*(x-jump) - (x-jump)*(x-jump);
-				if ((double)(x-jump)/jumpLength < 0.15){
+				if ((double)(x-jump)/jumpLength < 0.13){
 					jumpSprite = 0;
 				}
-				else if ((double)(x-jump)/jumpLength < 0.3){
+				else if ((double)(x-jump)/jumpLength < 0.26){
 					jumpSprite = 1;
 				}
-				else if ((double)(x-jump)/jumpLength < 0.45){
+				else if ((double)(x-jump)/jumpLength < 0.39){
 					jumpSprite = 2;
 				}
-				else if ((double)(x-jump)/jumpLength < 0.6){
+				else if ((double)(x-jump)/jumpLength < 0.52){
 					jumpSprite = 3;
 				}
-				else if ((double)(x-jump)/jumpLength >= 0.6){
+				else if ((double)(x-jump)/jumpLength >= 0.52){
 					jumpSprite = 4;
 				}
 				
@@ -175,7 +177,8 @@ public class Krakatoa extends JFrame {
 		gr.drawImage(pic.getImage(),600-(x+1656)*5%3312, 0, null );
 		gr.drawImage(pic.getImage(),600-x*5%3312, 0, null );
 		gr.setColor(Color.blue);
-		gr.fillRect(600-x*10%720,300,120,60);
+		//gr.fillRect(600-x*10%720,300,120,60);
+		gr.drawImage(platforms[0].getImage(), 600-x*10%841, 300, null);
 		gr.setColor(Color.yellow);
 		if (y == 0)
 			gr.drawImage(jogger[x%8+1].getImage(),120,212-y,null);
