@@ -65,7 +65,7 @@ public class Krakatoa extends JFrame {
 	int jump = 0;
 	int jumpSprite = 0;
 	int y = 0;
-	int jumpLength = 60; //Jump is 20 frames long
+	int jumpLength = 20; //Jump is 20 frames long
 	boolean isjump = false;
 	boolean isPaused = false;
 	ImageIcon pic = new ImageIcon("background2.gif");
@@ -116,19 +116,19 @@ public class Krakatoa extends JFrame {
 			x++;
 		    if (isjump){
 				y = 20*(x-jump) - (x-jump)*(x-jump);
-				if ((x-jump)/jumpLength < 1/6){
+				if ((double)(x-jump)/jumpLength < 0.15){
 					jumpSprite = 0;
 				}
-				else if ((x-jump)/jumpLength < 1/3){
+				else if ((double)(x-jump)/jumpLength < 0.3){
 					jumpSprite = 1;
 				}
-				else if ((x-jump)/jumpLength < 1/2){
+				else if ((double)(x-jump)/jumpLength < 0.45){
 					jumpSprite = 2;
 				}
-				else if ((x-jump)/jumpLength < 2/3){
+				else if ((double)(x-jump)/jumpLength < 0.6){
 					jumpSprite = 3;
 				}
-				else if ((x-jump)/jumpLength >= 2/3){
+				else if ((double)(x-jump)/jumpLength >= 0.6){
 					jumpSprite = 4;
 				}
 				
