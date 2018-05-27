@@ -59,7 +59,7 @@ public class Krakatoa extends JFrame {
       );
    } 
 }
- class MyPanel extends JPanel implements ActionListener, KeyListener {
+ class MyPanel extends JPanel implements ActionListener, KeyListener{
 	//variables - they are all global
 	int x;
 	int jump = 0;
@@ -68,6 +68,16 @@ public class Krakatoa extends JFrame {
 	int jumpLength = 20; //Jump is 20 frames long
 	boolean isjump = false;
 	boolean isPaused = false;
+	int screen = 0;
+	String storyline = "The year is 1883. You are a Dutch colonist in   #search of precious jewels. The natives of the   #island of Java had told you not to enter        #KRAKATOA, but in your folly and greed, you had  #decided to ignore them. Now, the volcano is     #erupting, and you must escape before it is too  #late. Your chances do not look good...          #Press the up key to jump.                     #Press enter to begin.                           ";
+	String story[] = storyline.split("#");
+	Font  f1  = new Font(Font.MONOSPACED, Font.BOLD,  100);
+	Font f2 = new Font(Font.MONOSPACED, Font.BOLD, 40);
+	Font f3 = new Font(Font.MONOSPACED, Font.PLAIN, 20);
+	
+
+	
+	
 	ImageIcon pic = new ImageIcon("background2.gif");
 	
 	ImageIcon [] jogger = {
@@ -97,7 +107,9 @@ public class Krakatoa extends JFrame {
 	public  MyPanel() { 			//initial all the variables
 
            // Constructor: set background color to white set up listeners to respond to mouse actions
-         setBackground(new Color(250,100,10));				 
+
+		 
+         setBackground(new Color(248,236,194));				 
 		 addKeyListener(this);	
          x=0;
 		myTimer.start();
@@ -107,7 +119,12 @@ public class Krakatoa extends JFrame {
 		if (ev.getKeyCode()==38 && y==0){
 			isjump = true;
 			jump = x;
-		}	
+		}
+
+		if (ev.getKeyCode()==10 && screen < 2){
+			screen += 1;
+			x = 0;
+		}
 	}	
     public void keyReleased( KeyEvent e ){		
 	}
@@ -168,22 +185,52 @@ public class Krakatoa extends JFrame {
 	
 	
 	// end actionPerformed
-	 
+	
 	
 	public void paintComponent(Graphics gr){  // painting
 		super.paintComponent(gr);
 		
-
-		gr.drawImage(pic.getImage(),600-(x+1656)*5%3312, 0, null );
-		gr.drawImage(pic.getImage(),600-x*5%3312, 0, null );
-		gr.setColor(Color.blue);
-		//gr.fillRect(600-x*10%720,300,120,60);
-		gr.drawImage(platforms[0].getImage(), 600-x*10%841, 300, null);
-		gr.setColor(Color.yellow);
-		if (y == 0)
-			gr.drawImage(jogger[x%8+1].getImage(),120,212-y,null);
-		else
-			gr.drawImage(jumping[jumpSprite].getImage(),120,212-y,null);
+		gr.setColor(Color.pink);
+		gr.setFont(f1);
+		
+		if (screen == 0){
+			gr.drawImage(pic.getImage(),600-(x+1656)*5%3312, 0, null );
+			gr.drawImage(pic.getImage(),600-x*5%3312, 0, null );
+			gr.setColor(Color.white);
+			gr.setFont(f1);
+			gr.drawString("KRAKATOA",0,100);
+			gr.setFont(f2);
+			gr.drawString("West of Java",0,150);
+			if (x%10 < 5){
+				gr.setColor(Color.blue);
+				gr.drawString("Press enter to start",0,500);
+			}
+		}
+		
+		else if (screen == 1) {
+			gr.setColor(Color.black);
+			gr.setFont(f3);
+			for (int i = 0; i < story.length; i++){
+				if (x >= i*48){
+					if (x >= (i+1)*48)
+						gr.drawString(story[i], 0, 20*(i+1));
+					else
+						gr.drawString(story[i].substring(0,x%48), 0, 20*(i+1));
+				}
+			}
+		}
+		else{
+			gr.drawImage(pic.getImage(),600-(x+1656)*5%3312, 0, null );
+			gr.drawImage(pic.getImage(),600-x*5%3312, 0, null );
+			gr.setColor(Color.blue);
+			//gr.fillRect(600-x*10%720,300,120,60);
+			gr.drawImage(platforms[0].getImage(), 600-x*10%841, 300, null);
+			gr.setFont(f1);
+			if (y == 0)
+				gr.drawImage(jogger[x%8+1].getImage(),120,212-y,null);
+			else
+				gr.drawImage(jumping[jumpSprite].getImage(),120,212-y,null);
+		}
 
 	}
 }
