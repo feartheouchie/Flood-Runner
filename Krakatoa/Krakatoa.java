@@ -69,7 +69,7 @@ public class Krakatoa extends JFrame {
 	boolean isjump = false;
 	boolean isPaused = false;
 	int screen = 0;
-	String storyline = "The year is 1883. You are a Dutch colonist in   #search of precious jewels. The natives of the   #island of Java had told you not to enter        #KRAKATOA, but in your folly and greed, you had  #decided to ignore them. Now, the volcano is     #erupting, and you must escape before it is too  #late. Your chances do not look good...          #Press the up key to jump.                     #Press enter to begin.                           ";
+	String storyline = "The year is 1883. You are a Dutch colonist in   #search of precious jewels. The natives of the   #island of Java had told you not to enter        #KRAKATOA, but in your folly and greed, you had  #decided to ignore them. Now, the volcano is     #erupting, and you must escape before it is too  #late. Your chances do not look good...          #Press the up key to jump.                       #Press enter to begin.                           ";
 	String story[] = storyline.split("#");
 	Font  f1  = new Font(Font.MONOSPACED, Font.BOLD,  100);
 	Font f2 = new Font(Font.MONOSPACED, Font.BOLD, 40);
