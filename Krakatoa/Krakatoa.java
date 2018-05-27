@@ -16,7 +16,7 @@ public class Krakatoa extends JFrame {
 
 
 	public Krakatoa()   {
-		super( "Button Template" );
+		super( "Krakatoa: West of Java" );
 
 		southPanel.setLayout(new GridLayout(1,3));
 
