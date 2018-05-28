@@ -1,11 +1,14 @@
-//Shashank Anand & Michael Raczkowski
-
+/*
+Shashank Anand & Michael Raczkowski
+June 13 2018
+Culminating Activity
+ICS 3U1
+Ms. Strelkovska
+*/
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.io.*;
-import java.util.*;
-import sun.audio;
 
 public class Krakatoa extends JFrame {
   // private JLabel lbl[][] = new JLabel[10][10];       // number of buttons - can be changed
@@ -51,7 +54,6 @@ public class Krakatoa extends JFrame {
   
     public static void main( String args[] ) {
         Krakatoa app = new Krakatoa();
-		playMusic("Awaken_My_Masters.wav""); 
         app.addWindowListener(
             new WindowAdapter() {
                 public void windowClosing( WindowEvent e )
@@ -236,15 +238,4 @@ public class Krakatoa extends JFrame {
 		}
 
 	}
-	public void playMusic(String filename){
-		InputStream music;
-		try{
-			music = new FileInputStream(new File(filename));
-			AudioStream audio = new AudioStream(music);
-			AudioPlayer.player.start(audio);
-		}
-		catch(Exception e){
-			//System.err.println("Error");
-		}	
-	}	
 }
