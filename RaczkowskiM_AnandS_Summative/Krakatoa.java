@@ -68,7 +68,7 @@ public class Krakatoa extends JFrame {
 	//variables - they are all global
 	int x;
 	int jump = 0;
-	int jumpSprite = 0;
+	//int jumpSprite = 0;
 	int y = 0;
 	int jumpLength = 20; //Jump is 20 frames long
 	boolean isjump = false;
@@ -79,6 +79,7 @@ public class Krakatoa extends JFrame {
 	Font  f1  = new Font(Font.MONOSPACED, Font.BOLD,  100);
 	Font f2 = new Font(Font.MONOSPACED, Font.BOLD, 40);
 	Font f3 = new Font(Font.MONOSPACED, Font.PLAIN, 20);
+	int jframe = 0;
 	
 
 	
@@ -94,14 +95,18 @@ public class Krakatoa extends JFrame {
 		new ImageIcon("Jogging10.png"),
 		new ImageIcon("Jogging11.png"),
 		new ImageIcon("Jogging12.png"),
-		new ImageIcon("Jogging13.png"),
+		new ImageIcon("Jogging13.png")
 	 }; 
+	 ImageIcon falling = new ImageIcon("Jumping05.png");
 	ImageIcon [] jumping = {
 		new ImageIcon("Jumping01.png"),
 		new ImageIcon("Jumping02.png"),
 		new ImageIcon("Jumping03.png"),
 		new ImageIcon("Jumping04.png"),
-		new ImageIcon("Jumping05.png"),
+		falling,
+		falling,
+		falling,
+		falling
 	};
 	ImageIcon [] platforms = {
 		new ImageIcon("Platform1.png")
@@ -139,21 +144,8 @@ public class Krakatoa extends JFrame {
 			x++;
 		    if (isjump){
 				y = 20*(x-jump) - (x-jump)*(x-jump);
-				if ((double)(x-jump)/jumpLength < 0.13){
-					jumpSprite = 0;
-				}
-				else if ((double)(x-jump)/jumpLength < 0.26){
-					jumpSprite = 1;
-				}
-				else if ((double)(x-jump)/jumpLength < 0.39){
-					jumpSprite = 2;
-				}
-				else if ((double)(x-jump)/jumpLength < 0.52){
-					jumpSprite = 3;
-				}
-				else if ((double)(x-jump)/jumpLength >= 0.52){
-					jumpSprite = 4;
-				}
+			
+				jframe = (int)Math.floor((double)(x-jump)/jumpLength * 8 + 0.03);
 				
 			if (y < 0){
 				isjump = false;
@@ -234,7 +226,7 @@ public class Krakatoa extends JFrame {
 			if (y == 0)
 				gr.drawImage(jogger[x%8+1].getImage(),120,212-y,null);
 			else
-				gr.drawImage(jumping[jumpSprite].getImage(),120,212-y,null);
+				gr.drawImage(jumping[jframe].getImage(),120,212-y,null);
 		}
 
 	}
