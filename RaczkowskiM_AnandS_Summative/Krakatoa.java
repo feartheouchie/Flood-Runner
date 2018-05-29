@@ -206,7 +206,7 @@ public class Krakatoa extends JFrame {
 		else if (screen == 1) {
 			gr.setColor(Color.black);
 			gr.setFont(f3);
-			gr.drawString("Press enter to skip", 10, 500);
+			gr.drawString("Press enter to skip.", 10, 500);
 			for (int i = 0; i < story.length; i++){
 				if (x >= i*48){
 					if (x >= (i+1)*48)
