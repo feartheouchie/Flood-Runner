@@ -74,15 +74,15 @@ public class Krakatoa extends JFrame {
 	boolean isjump = false;
 	boolean isPaused = false;
 	int screen = 0;
+	double speed = 1;
 	String storyline = "The year is 1883. You are a Dutch colonist in   #search of precious jewels. The natives of the   #island of Java had told you not to enter        #KRAKATOA, but in your folly and greed, you had  #decided to ignore them. Now, the volcano is     #erupting, and you must escape before it is too  #late. Your chances do not look good...          #Press the up key to jump.                       #Press enter to begin.                           ";
 	String story[] = storyline.split("#");
 	Font  f1  = new Font(Font.MONOSPACED, Font.BOLD,  100);
 	Font f2 = new Font(Font.MONOSPACED, Font.BOLD, 40);
 	Font f3 = new Font(Font.MONOSPACED, Font.PLAIN, 20);
 	int jframe = 0;
-	
-
-	
+	int MAXHEIGHT;
+	int MINHEIGHT;
 	
 	ImageIcon pic = new ImageIcon("background2.gif");
 	
@@ -217,11 +217,11 @@ public class Krakatoa extends JFrame {
 			}
 		}
 		else{
-			gr.drawImage(pic.getImage(),600-(x+1656)*5%3312, 0, null );
-			gr.drawImage(pic.getImage(),600-x*5%3312, 0, null );
+			gr.drawImage(pic.getImage(),Math.floor(600-(x*speed/2+1656)*5%3312), 0, null );
+			gr.drawImage(pic.getImage(),Math.floor(600-x*speed/2*5%3312), 0, null );
 			gr.setColor(Color.blue);
 			//gr.fillRect(600-x*10%720,300,120,60);		 Not needed right now
-			gr.drawImage(platforms[0].getImage(), 600-x*10%841, 300, null);
+			gr.drawImage(platforms[0].getImage(), Math.floor(600-x*speed*10%841), 300, null);
 			gr.setFont(f1);
 			if (y == 0)
 				gr.drawImage(jogger[x%8+1].getImage(),120,212-y,null);
