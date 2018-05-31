@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.io.*;
+import java.util.ArrayList;
 
 public class Krakatoa extends JFrame {
   // private JLabel lbl[][] = new JLabel[10][10];       // number of buttons - can be changed
@@ -81,8 +82,8 @@ public class Krakatoa extends JFrame {
 	Font f2 = new Font(Font.MONOSPACED, Font.BOLD, 40);
 	Font f3 = new Font(Font.MONOSPACED, Font.PLAIN, 20);
 	int jframe = 0;
-	int MAXHEIGHT;
-	int MINHEIGHT;
+	int MAXHEIGHT= ;
+	int MINHEIGHT = 525;
 	
 	ImageIcon pic = new ImageIcon("background2.gif");
 	
@@ -217,11 +218,11 @@ public class Krakatoa extends JFrame {
 			}
 		}
 		else{
-			gr.drawImage(pic.getImage(),Math.floor(600-(x*speed/2+1656)*5%3312), 0, null );
-			gr.drawImage(pic.getImage(),Math.floor(600-x*speed/2*5%3312), 0, null );
+			gr.drawImage(pic.getImage(),(int)Math.floor(600-(x*speed/2+1656)*5%3312), 0, null );
+			gr.drawImage(pic.getImage(),(int)Math.floor(600-x*speed/2*5%3312), 0, null );
 			gr.setColor(Color.blue);
 			//gr.fillRect(600-x*10%720,300,120,60);		 Not needed right now
-			gr.drawImage(platforms[0].getImage(), Math.floor(600-x*speed*10%841), 300, null);
+			gr.drawImage(platforms[0].getImage(),(int)Math.floor(600-x*speed*10%841), 300, null);
 			gr.setFont(f1);
 			if (y == 0)
 				gr.drawImage(jogger[x%8+1].getImage(),120,212-y,null);
