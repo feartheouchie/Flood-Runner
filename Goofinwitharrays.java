@@ -6,11 +6,12 @@ class Goofin{
 	//MyPanel
 	ImageIcon[] platformType = {};
 	
-	int[] waitTimes = new int{5,6,7,8};
+	int[] waitTimes = new int[]{5,6,7,8};
+	int lheight;
 	
-	int pType = 4;
-	int wait = 0;
-	int height = 400;
+	int pType = 4; //Long platform B O I
+	int wait = 0; 
+	int height = 400; //Elevetion of the special platform
 	
 	ArrayList <int[]> platforms = new ArrayList<int[]>();
 	int [] arr = {1,2,3,5};
@@ -20,9 +21,11 @@ class Goofin{
 	
 	//Timer loop
 	if(wait == 0){
-		platform.add({600, height, pType});
+		int[] tempList = new int[]{600, height, pType};
+		platforms.add(tempList);
 		pType = (int)(Math.random()*4);
 		wait += waitTimes[pType];
+		lheight = platforms.get(platforms.size()-2)[1];
 	}
 	
 	

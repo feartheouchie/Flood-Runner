@@ -71,7 +71,7 @@ public class Krakatoa extends JFrame {
 	int jump = 0;
 	//int jumpSprite = 0;
 	int y = 0;
-	int jumpLength = 20; //Jump is 20 frames long
+	int JUMPLENGTH = 20; //Jump is 20 frames long
 	boolean isjump = false;
 	boolean isPaused = false;
 	int screen = 0;
@@ -82,8 +82,11 @@ public class Krakatoa extends JFrame {
 	Font f2 = new Font(Font.MONOSPACED, Font.BOLD, 40);
 	Font f3 = new Font(Font.MONOSPACED, Font.PLAIN, 20);
 	int jframe = 0;
-	int MAXHEIGHT= ;
+	
+	int MAXHEIGHT;
 	int MINHEIGHT = 525;
+	double GRAV_ACCEL = 2;
+	double V_INITIAL = 20;
 	
 	ImageIcon pic = new ImageIcon("background2.gif");
 	
@@ -98,7 +101,7 @@ public class Krakatoa extends JFrame {
 		new ImageIcon("Jogging12.png"),
 		new ImageIcon("Jogging13.png")
 	 }; 
-	 ImageIcon falling = new ImageIcon("Jumping05.png");
+	ImageIcon falling = new ImageIcon("Jumping05.png");
 	ImageIcon [] jumping = {
 		new ImageIcon("Jumping01.png"),
 		new ImageIcon("Jumping02.png"),
@@ -144,9 +147,8 @@ public class Krakatoa extends JFrame {
         if (e.getSource()==myTimer){
 			x++;
 		    if (isjump){
-				y = 20*(x-jump) - (x-jump)*(x-jump);
-			
-				jframe = (int)Math.floor((double)(x-jump)/jumpLength * 8 + 0.03);
+				y = (int)(V_INITIAL*(x-jump) - 0.5*GRAV_ACCEL*Math.pow((x-jump), 2));
+				jframe = (int)Math.floor((double)(x-jump)/JUMPLENGTH * 8 + 0.03);
 				
 			if (y < 0){
 				isjump = false;
