@@ -85,8 +85,10 @@ public class Krakatoa extends JFrame {
 	
 	int MAXHEIGHT;
 	int MINHEIGHT = 525;
-	double GRAV_ACCEL = 2;
-	double V_INITIAL = 20;
+	double G = 2;
+	double V = 20;
+	double JUMPHEIGHT = (V*V)/(2*G);
+	int VX = speed*10
 	
 	ImageIcon pic = new ImageIcon("background2.gif");
 	
@@ -112,7 +114,7 @@ public class Krakatoa extends JFrame {
 		falling,
 		falling
 	};
-	ImageIcon [] platforms = {
+	ImageIcon [] platformSprites = {
 		new ImageIcon("Platform1.png")
 	};
 	
@@ -147,7 +149,7 @@ public class Krakatoa extends JFrame {
         if (e.getSource()==myTimer){
 			x++;
 		    if (isjump){
-				y = (int)(V_INITIAL*(x-jump) - 0.5*GRAV_ACCEL*Math.pow((x-jump), 2));
+				y = (int)(V*(x-jump) - 0.5*G*Math.pow((x-jump), 2));
 				jframe = (int)Math.floor((double)(x-jump)/JUMPLENGTH * 8 + 0.03);
 				
 			if (y < 0){
@@ -224,7 +226,7 @@ public class Krakatoa extends JFrame {
 			gr.drawImage(pic.getImage(),(int)Math.floor(600-x*speed/2*5%3312), 0, null );
 			gr.setColor(Color.blue);
 			//gr.fillRect(600-x*10%720,300,120,60);		 Not needed right now
-			gr.drawImage(platforms[0].getImage(),(int)Math.floor(600-x*speed*10%841), 300, null);
+			gr.drawImage(platformSprites[0].getImage(),(int)Math.floor(600-x*speed*10%841), 300, null);
 			gr.setFont(f1);
 			if (y == 0)
 				gr.drawImage(jogger[x%8+1].getImage(),120,212-y,null);
