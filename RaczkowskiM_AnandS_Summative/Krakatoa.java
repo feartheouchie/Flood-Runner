@@ -115,7 +115,7 @@ public class Krakatoa extends JFrame {
 		falling
 	};
 	
-	int[] waitTimes = new int[]{5,6,7,8};
+	int[] waitTimes = new int[]{241,241,241,241};
 	int lHeight;
 	int pType = 4; //Long platform ;)
 	int wait = 0; 
@@ -133,7 +133,10 @@ public class Krakatoa extends JFrame {
 		new ImageIcon("Platform1.png"),
 		new ImageIcon("Platform1.png")
 	};
-	ArrayList <int[]> platforms = new ArrayList<int[]>();
+	ArrayList <Integer> platformsT = new ArrayList<Integer>();
+	ArrayList <Integer> platformsX = new ArrayList<Integer>();
+	ArrayList <Integer> platformsY = new ArrayList<Integer>();
+
 	
 	private Timer myTimer= new Timer( 60, this );
 	 
@@ -180,14 +183,14 @@ public class Krakatoa extends JFrame {
 
 			if(wait <= 0){
 				wait = 0;
-				tempList[0] = (int)(600 + speed*10);
-				tempList[1] = height;
-				tempList[2] = pType;
-				platforms.add(tempList);
+
+				platformsT.add(pType);
+				platformsX.add((int)(600 + speed*10));
+				platformsY.add(height);
 				
 				pType = (int)(Math.random()*4);
 				wait += waitTimes[pType];
-				lHeight = platforms.get(platforms.size()-1)[1];
+				lHeight = platformsY.get(platformsY.size()-1);
 				maxT = Math.max((int)(lHeight - JUMPHEIGHT-10),MAXH);
 				minT = Math.min((int)(lHeight + JUMPHEIGHT-10),MINH);
 				height = (int)(Math.random()*(minT-maxT))+maxT;
@@ -197,10 +200,19 @@ public class Krakatoa extends JFrame {
 			}
 			wait -= speed*10;
 			
-			for(int i = 0; i < platforms.size(); i++){
-				platforms.get(i)[0] -= speed*10;
+			for(int i = 0; i < platformsX.size(); i++){
+				if (platformsX.get(i) < -400){
+					platformsT.remove(i);
+					platformsX.remove(i);
+					platformsY.remove(i);
+					i--;
+				}
+				else{
+					System.out.print(platformsX.get(i) + "  ");
+					platformsX.set(i,(int)(platformsX.get(i) - speed*10));
+				}
 			}
-
+			System.out.print("\n");
 
 
 
@@ -277,8 +289,8 @@ public class Krakatoa extends JFrame {
 			gr.drawImage(pic.getImage(),(int)Math.floor(600-x*speed/2*5%3312), 0, null );
 			gr.setColor(Color.blue);
 			//gr.fillRect(600-x*10%720,300,120,60);		 Not needed right now
-			for(int i = 0; i < platforms.size(); i++)
-				gr.drawImage(platformSprites[platforms.get(i)[2]].getImage(), platforms.get(i)[0], platforms.get(i)[1], null);
+			for(int i = 0; i < platformsX.size(); i++)
+				gr.drawImage(platformSprites[platformsT.get(i)].getImage(), platformsX.get(i), platformsY.get(i), null);
 			// gr.drawImage(platformSprites[0].getImage(),(int)Math.floor(600-x*speed*10%841), 300, null);
 			gr.setFont(f1);
 			if (y == 0)
