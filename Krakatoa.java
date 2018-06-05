@@ -178,8 +178,7 @@ public class Krakatoa extends JFrame {
 			repaint();
 
 
-			if(wait <= 0){
-				wait = 0;
+			if(wait == 0){
 				tempList[0] = (int)(600 + speed*10);
 				tempList[1] = height;
 				tempList[2] = pType;
