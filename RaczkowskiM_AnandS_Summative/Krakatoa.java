@@ -69,9 +69,8 @@ public class Krakatoa extends JFrame {
 	//variables - they are all global
 	int x;
 	int jump = 0;
-	//int jumpSprite = 0;
 	int y = 0;
-	int JUMPLENGTH = 20; //Jump is 20 frames long
+	int JUMPLENGTH = 20;
 	boolean isjump = false;
 	boolean isPaused = false;
 	int screen = 0;
@@ -82,16 +81,24 @@ public class Krakatoa extends JFrame {
 	Font f2 = new Font(Font.MONOSPACED, Font.BOLD, 40);
 	Font f3 = new Font(Font.MONOSPACED, Font.PLAIN, 20);
 	int jframe = 0;
-	
 	int MAXHEIGHT = 100;
 	int MINHEIGHT = 525;
 	double G = 2;
 	double V = 20;
 	double JUMPHEIGHT = (V*V)/(2*G);
 	int VX = (int)(speed*10);
-	
+	int[] waitTimes = new int[]{241,241,241,241};
+	int lHeight;
+	int pType = 4; //Long platform ;)
+	int wait = 0; 
+	int height = 400; //Elevation of the special platform
+	int MINH = 450;
+	int MAXH = 100;
+	int minT;
+	int maxT;
+	int maxD;
+	int[] tempList = new int[3];
 	ImageIcon pic = new ImageIcon("background2.gif");
-	
 	ImageIcon [] jogger = {
 		new ImageIcon("Jogging01.png"),
 		new ImageIcon("Jogging06.png"),
@@ -114,18 +121,6 @@ public class Krakatoa extends JFrame {
 		falling,
 		falling
 	};
-	
-	int[] waitTimes = new int[]{241,241,241,241};
-	int lHeight;
-	int pType = 4; //Long platform ;)
-	int wait = 0; 
-	int height = 400; //Elevation of the special platform
-	int MINH = 450;
-	int MAXH = 100;
-	int minT;
-	int maxT;
-	int maxD;
-	int[] tempList = new int[3];
 	ImageIcon [] platformSprites = {
 		new ImageIcon("Platform1.png"),
 		new ImageIcon("Platform1.png"),
@@ -170,7 +165,10 @@ public class Krakatoa extends JFrame {
 			x++;
 		    if (isjump){
 				y = (int)(V*(x-jump) - 0.5*G*Math.pow((x-jump), 2));
-				jframe = (int)Math.floor((double)(x-jump)/JUMPLENGTH * 8 + 0.03);
+				if (x-jump <= JUMPLENGTH)
+					jframe = (int)Math.floor((double)(x-jump)/JUMPLENGTH * 8 + 0.03);
+				else
+					jframe = 7;
 				
 				if (y < 0){
 					isjump = false;
@@ -180,40 +178,42 @@ public class Krakatoa extends JFrame {
 		// timer events
 			repaint();
 
-
-			if(wait <= 0){
-				wait = 0;
-
-				platformsT.add(pType);
-				platformsX.add((int)(600 + speed*10));
-				platformsY.add(height);
-				
-				pType = (int)(Math.random()*4);
-				wait += waitTimes[pType];
-				lHeight = platformsY.get(platformsY.size()-1);
-				maxT = Math.max((int)(lHeight - JUMPHEIGHT-10),MAXH);
-				minT = Math.min((int)(lHeight + JUMPHEIGHT-10),MINH);
-				height = (int)(Math.random()*(minT-maxT))+maxT;
-				maxD = (int)(VX * (  ( V + (int)Math.sqrt(V*V + 2*G*height) ) / G  )  -  10);
-				wait += (int)(Math.random()*maxD);
-				
-			}
-			wait -= speed*10;
-			
-			for(int i = 0; i < platformsX.size(); i++){
-				if (platformsX.get(i) < -400){
-					platformsT.remove(i);
-					platformsX.remove(i);
-					platformsY.remove(i);
-					i--;
+			if (screen > 1){
+				if(wait <= 0){
+					wait = 0;
+					platformsT.add(pType);
+					if (pType == 4)
+						platformsX.add(0);
+					else
+						platformsX.add((int)(600 + speed*10));
+					platformsY.add(height);
+					
+					pType = (int)(Math.random()*4);
+					wait += waitTimes[pType];
+					lHeight = platformsY.get(platformsY.size()-1);
+					maxT = Math.max((int)(lHeight - JUMPHEIGHT-10),MAXH);
+					minT = Math.min((int)(lHeight + JUMPHEIGHT-10),MINH);
+					height = (int)(Math.random()*(minT-maxT))+maxT;
+					maxD = (int)(VX * (  ( V + (int)Math.sqrt(V*V + 2*G*height) ) / G  )  -  10);
+					wait += (int)(Math.random()*maxD);
+					
 				}
-				else{
-					System.out.print(platformsX.get(i) + "  ");
-					platformsX.set(i,(int)(platformsX.get(i) - speed*10));
+				wait -= speed*10;
+				
+				for(int i = 0; i < platformsX.size(); i++){
+					if (platformsX.get(i) < -400){
+						platformsT.remove(i);
+						platformsX.remove(i);
+						platformsY.remove(i);
+						i--;
+					}
+					else{
+						System.out.print(platformsX.get(i) + "  ");
+						platformsX.set(i,(int)(platformsX.get(i) - speed*10));
+					}
 				}
+				System.out.print("\n");
 			}
-			System.out.print("\n");
-
 
 
 
@@ -288,10 +288,8 @@ public class Krakatoa extends JFrame {
 			gr.drawImage(pic.getImage(),(int)Math.floor(600-(x*speed/2+1656)*5%3312), 0, null );
 			gr.drawImage(pic.getImage(),(int)Math.floor(600-x*speed/2*5%3312), 0, null );
 			gr.setColor(Color.blue);
-			//gr.fillRect(600-x*10%720,300,120,60);		 Not needed right now
 			for(int i = 0; i < platformsX.size(); i++)
 				gr.drawImage(platformSprites[platformsT.get(i)].getImage(), platformsX.get(i), platformsY.get(i), null);
-			// gr.drawImage(platformSprites[0].getImage(),(int)Math.floor(600-x*speed*10%841), 300, null);
 			gr.setFont(f1);
 			if (y == 0)
 				gr.drawImage(jogger[x%8+1].getImage(),120,212-y,null);
