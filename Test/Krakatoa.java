@@ -86,11 +86,11 @@ public class Krakatoa extends JFrame {
 	double V = 20;
 	double JUMPHEIGHT = (V*V)/(2*G);
 	int VX = (int)(speed*10);
-	int[] waitTimes = new int[]{241,241,241,241};
+	int[] waitTimes = new int[]{241,241,241,241,0};
 	int lHeight;
-	int pType = 4; //Long platform ;)
+	int pType = 4; //Long platform
 	int wait = 0; 
-	int height = 400; //Elevation of the special platform
+	int height = 212; //Elevation of the special platform
 	int MINH = 450;
 	int MAXH = 100;
 	int minT;
@@ -98,11 +98,14 @@ public class Krakatoa extends JFrame {
 	int maxD;
 	
 	
-	int x2 = 0
+	int x2 = 0;
 	int MANX = 163;
 	int ymin = 212;
 	int y = ymin;
+	int yminT = ymin;
+	int ylast = y;
 	boolean isPlatform = false;
+	int t = 0;
 	
 	int[] tempList = new int[3];
 	ImageIcon pic = new ImageIcon("background2.gif");
@@ -133,7 +136,7 @@ public class Krakatoa extends JFrame {
 		new ImageIcon("Platform1.png"),
 		new ImageIcon("Platform1.png"),
 		new ImageIcon("Platform1.png"),
-		new ImageIcon("Platform1.png")
+		new ImageIcon("PlatformL.png")
 	};
 	ArrayList <Integer> platformsT = new ArrayList<Integer>();
 	ArrayList <Integer> platformsX = new ArrayList<Integer>();
@@ -176,12 +179,7 @@ public class Krakatoa extends JFrame {
 					jframe = (int)Math.floor((double)(x-jump)/JUMPLENGTH * 8 + 0.03);
 				else
 					jframe = 7;
-				
-				if (y > ymin){
-					isjump = false;
-					y = ymin;
 				}
-			}
 		// timer events
 			repaint();
 
@@ -189,14 +187,14 @@ public class Krakatoa extends JFrame {
 				if(wait <= 0){
 					wait = 0;
 					platformsT.add(pType);
+					
 					if (pType == 4)
 						platformsX.add(0);
 					else
 						platformsX.add((int)(600 + speed*10));
 					platformsY.add(height);
-					
-					pType = (int)(Math.random()*4);
 					wait += waitTimes[pType];
+					pType = (int)(Math.random()*4);
 					lHeight = platformsY.get(platformsY.size()-1);
 					maxT = Math.max((int)(lHeight - JUMPHEIGHT-10),MAXH);
 					minT = Math.min((int)(lHeight + JUMPHEIGHT-10),MINH);
@@ -208,41 +206,59 @@ public class Krakatoa extends JFrame {
 				wait -= speed*10;
 				
 				for(int i = 0; i < platformsX.size(); i++){
-					if (platformsX.get(i) < -400){
+					if (platformsX.get(i) < -2000){
 						platformsT.remove(i);
 						platformsX.remove(i);
 						platformsY.remove(i);
 						i--;
 					}
 					else{
-						System.out.print(platformsX.get(i) + "  ");
 						platformsX.set(i,(int)(platformsX.get(i) - speed*10));
 					}
 				}
-				System.out.print("\n");
 			}
 			
-			isPlatform = false;
-			for (int i = 0; i < platformsX.size(); i++){
-				x2 = platformsX.get(i);
-				t = waitTimes[platformsT.get(i)];
-				if (manX >= x2 && manX <= x2 + t){
-					ymin = platformsT.get(i);
-					isPlatform = true;
-					break;
+			if (isjump){
+				isPlatform = false;
+				for (int i = 0; i < platformsX.size(); i++){
+					x2 = platformsX.get(i);
+					t = waitTimes[platformsT.get(i)];
+					if (MANX >= x2 && MANX <= x2 + t){
+						yminT = platformsY.get(i);
+						isPlatform = true;
+						break;
+					}	
 				}	
-			}	
+				
+				if(!isPlatform){
+					yminT = 600;
+				}	
+
+				if (y < yminT)
+					isjump = true;
+				else{
+					//System.out.println(yminT);
+					//isjump = false;
+					//ymin = yminT;
+					//y = yminT;
+					if (ylast <= yminT){
+						isjump = false;
+						ymin = yminT;
+						y = yminT;
+					}
+					else
+						isjump = true;
+				}
+				
+				
+				ylast = y;
+			}
 			
-			if(!isPlatform){
-				ymin = 600;
-			}	
-
-
+		}
 
 
 
 		
-		}
 		
 		//Buttons
 		else{
@@ -312,9 +328,9 @@ public class Krakatoa extends JFrame {
 				gr.drawImage(platformSprites[platformsT.get(i)].getImage(), platformsX.get(i), platformsY.get(i), null);
 			gr.setFont(f1);
 			if (y == ymin)
-				gr.drawImage(jogger[x%8+1].getImage(),120,y,null);
+				gr.drawImage(jogger[x%8+1].getImage(),120,y-88,null);
 			else
-				gr.drawImage(jumping[jframe].getImage(),120,y,null);
+				gr.drawImage(jumping[jframe].getImage(),120,y-88,null);
 		}
 
 	}
