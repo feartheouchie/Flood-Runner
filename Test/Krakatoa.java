@@ -199,7 +199,7 @@ public class Krakatoa extends JFrame {
 					maxT = Math.max((int)(lHeight - JUMPHEIGHT-10),MAXH);
 					minT = Math.min((int)(lHeight + JUMPHEIGHT-10),MINH);
 					height = (int)(Math.random()*(minT-maxT))+maxT;
-					maxD = (int)(VX * (  ( V + (int)Math.sqrt(V*V + 2*G*height) ) / G  )  -  10);
+					maxD = (int)(VX * (  ( V + (int)Math.sqrt(V*V - 2*G*height) ) / G  ) );
 					wait += (int)(Math.random()*maxD);
 					
 				}
@@ -237,10 +237,6 @@ public class Krakatoa extends JFrame {
 				if (y < yminT)
 					isjump = true;
 				else{
-					//System.out.println(yminT);
-					//isjump = false;
-					//ymin = yminT;
-					//y = yminT;
 					if (ylast <= yminT){
 						isjump = false;
 						ymin = yminT;
