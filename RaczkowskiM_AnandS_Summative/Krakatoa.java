@@ -69,7 +69,7 @@ public class Krakatoa extends JFrame {
 	//variables - they are all global
 	int x;
 	int jump = 0;
-	int y = 0;
+	int y = 212;
 	int JUMPLENGTH = 20;
 	boolean isjump = false;
 	boolean isPaused = false;
@@ -146,7 +146,7 @@ public class Krakatoa extends JFrame {
 		myTimer.start();
 	}				 
     public void keyPressed( KeyEvent ev ) {
-		if (ev.getKeyCode()==38 && y==0){
+		if (ev.getKeyCode()==38 && y==212){
 			isjump = true;
 			jump = x;
 		}
@@ -170,9 +170,9 @@ public class Krakatoa extends JFrame {
 				else
 					jframe = 7;
 				
-				if (y < 0){
+				if (y < 212){
 					isjump = false;
-					y = 0;
+					y = 212;
 				}
 			}
 		// timer events
@@ -227,7 +227,7 @@ public class Krakatoa extends JFrame {
 		//Buttons
 		else{
 			JButton b= (JButton)e.getSource();	   
-			if (b.getText()=="Jump" && y == 0){
+			if (b.getText()=="Jump" && y == 212){
 			    isjump = true;
 				jump = x;
 			}
@@ -291,10 +291,10 @@ public class Krakatoa extends JFrame {
 			for(int i = 0; i < platformsX.size(); i++)
 				gr.drawImage(platformSprites[platformsT.get(i)].getImage(), platformsX.get(i), platformsY.get(i), null);
 			gr.setFont(f1);
-			if (y == 0)
-				gr.drawImage(jogger[x%8+1].getImage(),120,212-y,null);
+			if (y == 212)
+				gr.drawImage(jogger[x%8+1].getImage(),120,y,null);
 			else
-				gr.drawImage(jumping[jframe].getImage(),120,212-y,null);
+				gr.drawImage(jumping[jframe].getImage(),120,y,null);
 		}
 
 	}
