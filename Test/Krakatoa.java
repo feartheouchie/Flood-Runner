@@ -76,10 +76,12 @@ public class Krakatoa extends JFrame {
 	double speed = 1.5;
 	String storyline = "The year is 1883. You are a Dutch colonist in   #search of precious jewels. The natives of the   #island of Java had told you not to enter        #KRAKATOA, but in your folly and greed, you had  #decided to ignore them. Now, the volcano is     #erupting, and you must escape before it is too  #late. Your chances do not look good...          #Press the up key to jump.                       #Press enter to begin.                           ";
 	String story[] = storyline.split("#");
+	String deathMsg = "You died";
+	String enterMsg = "Press enter to replay";
 	Font  f1  = new Font(Font.MONOSPACED, Font.BOLD,  100);
 	Font f2 = new Font(Font.MONOSPACED, Font.BOLD, 40);
 	Font f3 = new Font(Font.MONOSPACED, Font.PLAIN, 20);
-	int jframe = 0;
+	int jframe = 0; //#
 	int MAXHEIGHT = 100;
 	int MINHEIGHT = 525;
 	double G = 2;
@@ -88,9 +90,9 @@ public class Krakatoa extends JFrame {
 	int VX = (int)(speed*10);
 	int[] waitTimes = new int[]{241,241,241,241,0};
 	int lHeight;
-	int pType = 4; //Long platform
-	int wait = 0; 
-	int height = 212; //Elevation of the special platform
+	int pType = 4;//#
+	int wait = 0; //#
+	int height = 212;//#
 	int MINH = 450;
 	int MAXH = 100;
 	int minT;
@@ -108,6 +110,7 @@ public class Krakatoa extends JFrame {
 	int t = 0;
 	boolean isfalling = false;
 	int jT = 0;
+	boolean firstLast = true;
 	
 	int[] tempList = new int[3];
 	ImageIcon pic = new ImageIcon("background2.gif");
@@ -158,7 +161,7 @@ public class Krakatoa extends JFrame {
 		myTimer.start();
 	}				 
     public void keyPressed( KeyEvent ev ) {
-		if (ev.getKeyCode()==38 && !isjump){
+		if (ev.getKeyCode()==38 && !isjump && screen > 1){
 			isjump = true;
 			jump = x;
 		}
@@ -166,6 +169,7 @@ public class Krakatoa extends JFrame {
 		if (ev.getKeyCode()==10 && screen < 2){
 			screen += 1;
 			x = 0;
+			firstLast = true;
 		}
 	}	
     public void keyReleased( KeyEvent e ){		
@@ -270,7 +274,21 @@ public class Krakatoa extends JFrame {
 			
 			if (y > 700){
 				screen = -1;
+				pType = 4;
+				wait = 0;
+				height = 212;
+				ymin = 212;
+				y = ymin;
+				yminT = ymin;
+				ylast = y;
+				platformsT.clear();
+				platformsX.clear();
+				platformsY.clear();
 				isjump = false;
+				if (firstLast){
+					x = 0;
+					firstLast = false;
+				}
 			}
 			
 			
@@ -284,7 +302,7 @@ public class Krakatoa extends JFrame {
 		//Buttons
 		else{
 			JButton b= (JButton)e.getSource();	   
-			if (b.getText()=="Jump" && !isjump){
+			if (b.getText()=="Jump" && !isjump && screen > 1){
 			    isjump = true;
 				jump = x;
 			}
@@ -344,7 +362,22 @@ public class Krakatoa extends JFrame {
 		
 		else if (screen == -1){
 			gr.setColor(Color.black);
-			gr.drawString("You died",0,300);
+			gr.setFont(f1);
+			
+			System.out.println(x);
+			if (x < deathMsg.length())
+				gr.drawString(deathMsg.substring(0,x),0,300);
+			else
+				gr.drawString(deathMsg,0,300);
+			gr.setFont(f2);
+			if (x >= deathMsg.length()){
+				if (x-deathMsg.length() < enterMsg.length())
+					gr.drawString(enterMsg.substring(0,x-deathMsg.length()),0,350);
+				else
+					gr.drawString(enterMsg,0,350);
+			}
+			
+			
 		}
 		else{
 			gr.drawImage(pic.getImage(),(int)Math.floor(600-(x*speed/2+1656)*5%3312), 0, null );
