@@ -353,7 +353,7 @@ public class Krakatoa extends JFrame {
 			for(int i = 0; i < platformsX.size(); i++)
 				gr.drawImage(platformSprites[platformsT.get(i)].getImage(), platformsX.get(i), platformsY.get(i), null);
 			gr.setFont(f1);
-			if (y == ymin)
+			if (!isjump)
 				gr.drawImage(jogger[x%8+1].getImage(),120,y-88,null);
 			else
 				gr.drawImage(jumping[jframe].getImage(),120,y-88,null);
