@@ -106,6 +106,8 @@ public class Krakatoa extends JFrame {
 	int ylast = y;
 	boolean isPlatform = false;
 	int t = 0;
+	boolean isfalling = false;
+	int jT = 0;
 	
 	int[] tempList = new int[3];
 	ImageIcon pic = new ImageIcon("background2.gif");
@@ -156,7 +158,7 @@ public class Krakatoa extends JFrame {
 		myTimer.start();
 	}				 
     public void keyPressed( KeyEvent ev ) {
-		if (ev.getKeyCode()==38 && y==ymin){
+		if (ev.getKeyCode()==38 && !isjump){
 			isjump = true;
 			jump = x;
 		}
@@ -174,9 +176,12 @@ public class Krakatoa extends JFrame {
         if (e.getSource()==myTimer){
 			x++;
 		    if (isjump){
-				y = (int)(0.5*G*Math.pow((x-jump), 2) - V*(x-jump) + ymin);
-				if (x-jump <= JUMPLENGTH)
-					jframe = (int)Math.floor((double)(x-jump)/JUMPLENGTH * 8 + 0.03);
+				jT = x-jump;
+				if (isfalling)
+					jT += JUMPLENGTH;
+				y = (int)(0.5*G*Math.pow((jT), 2) - V*(jT) + ymin);
+				if (jT < JUMPLENGTH)
+					jframe = (int)Math.floor((double)(jT)/JUMPLENGTH * 8 + 0.03);
 				else
 					jframe = 7;
 				}
@@ -196,8 +201,8 @@ public class Krakatoa extends JFrame {
 					wait += waitTimes[pType];
 					pType = (int)(Math.random()*4);
 					lHeight = platformsY.get(platformsY.size()-1);
-					maxT = Math.max((int)(lHeight - JUMPHEIGHT-10),MAXH);
-					minT = Math.min((int)(lHeight + JUMPHEIGHT-10),MINH);
+					maxT = Math.max((int)(lHeight - JUMPHEIGHT),MAXH);
+					minT = Math.min((int)(lHeight + JUMPHEIGHT),MINH);
 					height = (int)(Math.random()*(minT-maxT))+maxT;
 					maxD = (int)(VX * (  ( V + (int)Math.sqrt(V*V - 2*G*height) ) / G  ) );
 					wait += (int)(Math.random()*maxD);
@@ -218,11 +223,12 @@ public class Krakatoa extends JFrame {
 				}
 			}
 			
-			if (isjump){
 				isPlatform = false;
 				for (int i = 0; i < platformsX.size(); i++){
 					x2 = platformsX.get(i);
 					t = waitTimes[platformsT.get(i)];
+					if (t == 0)
+						t = 600;
 					if (MANX >= x2 && MANX <= x2 + t){
 						yminT = platformsY.get(i);
 						isPlatform = true;
@@ -231,8 +237,10 @@ public class Krakatoa extends JFrame {
 				}	
 				
 				if(!isPlatform){
-					yminT = 600;
-				}	
+					yminT = 800;
+				}
+
+			if (isjump) {
 
 				if (y < yminT)
 					isjump = true;
@@ -249,6 +257,23 @@ public class Krakatoa extends JFrame {
 				
 				ylast = y;
 			}
+			if (!isjump && y != yminT && screen > 1 && !isfalling){
+				isfalling = true;
+				isjump = true;
+				ymin = y;
+				jump = x;
+			}
+			
+			if (!isjump && isfalling)
+				isfalling = false;
+			
+			
+			if (y > 700){
+				screen = -1;
+				isjump = false;
+			}
+			
+			
 			
 		}
 
@@ -259,7 +284,7 @@ public class Krakatoa extends JFrame {
 		//Buttons
 		else{
 			JButton b= (JButton)e.getSource();	   
-			if (b.getText()=="Jump" && y == ymin){
+			if (b.getText()=="Jump" && !isjump){
 			    isjump = true;
 				jump = x;
 			}
@@ -315,6 +340,11 @@ public class Krakatoa extends JFrame {
 						gr.drawString(story[i].substring(0,x%48), 0, 20*(i+1));
 				}
 			}
+		}
+		
+		else if (screen == -1){
+			gr.setColor(Color.black);
+			gr.drawString("You died",0,300);
 		}
 		else{
 			gr.drawImage(pic.getImage(),(int)Math.floor(600-(x*speed/2+1656)*5%3312), 0, null );
