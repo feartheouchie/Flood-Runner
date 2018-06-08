@@ -115,7 +115,7 @@ public class Krakatoa extends JFrame {
 	boolean firstLast = true;
 	int score = 0;
 	int hScore = 0;
-	
+	int[] waitTimes = new int[]{241,304,106,179,0};
 	
 	int[] tempList = new int[3];
 	ImageIcon pic = new ImageIcon("background2.gif");
