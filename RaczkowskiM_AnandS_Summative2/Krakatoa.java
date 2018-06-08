@@ -88,7 +88,7 @@ public class Krakatoa extends JFrame {
 	double V = 20;
 	double JUMPHEIGHT = (V*V)/(2*G);
 	int VX = (int)(speed*10);
-	int[] waitTimes = new int[]{241,241,241,241,0};
+	int[] waitTimes = new int[]{241,304,106,179,0};
 	int lHeight;
 	int pType = 4;//#
 	int wait = 0; //#
@@ -138,9 +138,9 @@ public class Krakatoa extends JFrame {
 	};
 	ImageIcon [] platformSprites = {
 		new ImageIcon("Platform1.png"),
-		new ImageIcon("Platform1.png"),
-		new ImageIcon("Platform1.png"),
-		new ImageIcon("Platform1.png"),
+		new ImageIcon("Platform2.png"),
+		new ImageIcon("Platform3.png"),
+		new ImageIcon("Platform4.png"),
 		new ImageIcon("PlatformL.png")
 	};
 	ArrayList <Integer> platformsT = new ArrayList<Integer>();
