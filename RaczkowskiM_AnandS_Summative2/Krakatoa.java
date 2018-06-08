@@ -78,9 +78,11 @@ public class Krakatoa extends JFrame {
 	String story[] = storyline.split("#");
 	String deathMsg = "You died";
 	String enterMsg = "Press enter to replay";
+	String scoreMsg = "";
 	Font  f1  = new Font(Font.MONOSPACED, Font.BOLD,  100);
 	Font f2 = new Font(Font.MONOSPACED, Font.BOLD, 40);
 	Font f3 = new Font(Font.MONOSPACED, Font.PLAIN, 20);
+	Font f4 = new Font(Font.MONOSPACED, Font.BOLD, 20);
 	int jframe = 0; //#
 	int MAXHEIGHT = 100;
 	int MINHEIGHT = 525;
@@ -88,7 +90,7 @@ public class Krakatoa extends JFrame {
 	double V = 20;
 	double JUMPHEIGHT = (V*V)/(2*G);
 	int VX = (int)(speed*10);
-	int[] waitTimes = new int[]{241,304,106,179,0};
+	
 	int lHeight;
 	int pType = 4;//#
 	int wait = 0; //#
@@ -111,6 +113,9 @@ public class Krakatoa extends JFrame {
 	boolean isfalling = false;
 	int jT = 0;
 	boolean firstLast = true;
+	int score = 0;
+	int hScore = 0;
+	
 	
 	int[] tempList = new int[3];
 	ImageIcon pic = new ImageIcon("background2.gif");
@@ -286,7 +291,11 @@ public class Krakatoa extends JFrame {
 				platformsY.clear();
 				isjump = false;
 				if (firstLast){
+					score = x;
 					x = 0;
+					if (score > hScore)
+						hScore = score;
+					scoreMsg = "Score: " + score + " High Score: " + hScore;
 					firstLast = false;
 				}
 			}
@@ -364,7 +373,6 @@ public class Krakatoa extends JFrame {
 			gr.setColor(Color.black);
 			gr.setFont(f1);
 			
-			System.out.println(x);
 			if (x < deathMsg.length())
 				gr.drawString(deathMsg.substring(0,x),0,300);
 			else
@@ -375,6 +383,13 @@ public class Krakatoa extends JFrame {
 					gr.drawString(enterMsg.substring(0,x-deathMsg.length()),0,350);
 				else
 					gr.drawString(enterMsg,0,350);
+			}
+			gr.setFont(f3);
+			if (x >= deathMsg.length() + enterMsg.length()){
+				if (x - deathMsg.length() - enterMsg.length() + 4 < scoreMsg.length())
+					gr.drawString(scoreMsg.substring(0,x-scoreMsg.length()),0,370);
+				else
+					gr.drawString(scoreMsg,0,370);
 			}
 			
 			
@@ -390,6 +405,9 @@ public class Krakatoa extends JFrame {
 				gr.drawImage(jogger[x%8+1].getImage(),120,y-88,null);
 			else
 				gr.drawImage(jumping[jframe].getImage(),120,y-88,null);
+			gr.setColor(Color.white);
+			gr.setFont(f4);
+			gr.drawString("Score: " + x,0,520);
 		}
 
 	}
