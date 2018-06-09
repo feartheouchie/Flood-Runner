@@ -115,7 +115,7 @@ public class Krakatoa extends JFrame {
 	boolean firstLast = true;
 	int score = 0;
 	int hScore = 0;
-	int[] waitTimes = new int[]{241,304,106,179,0};
+	int[] waitTimes = new int[]{241,304,179,106,0};
 	
 	int[] tempList = new int[3];
 	ImageIcon pic = new ImageIcon("background2.gif");
@@ -144,8 +144,8 @@ public class Krakatoa extends JFrame {
 	ImageIcon [] platformSprites = {
 		new ImageIcon("Platform1.png"),
 		new ImageIcon("Platform2.png"),
-		new ImageIcon("Platform3.png"),
 		new ImageIcon("Platform4.png"),
+		new ImageIcon("Platform3.png"),
 		new ImageIcon("PlatformL.png")
 	};
 	ArrayList <Integer> platformsT = new ArrayList<Integer>();
@@ -208,7 +208,10 @@ public class Krakatoa extends JFrame {
 						platformsX.add((int)(600 + speed*10));
 					platformsY.add(height);
 					wait += waitTimes[pType];
-					pType = (int)(Math.random()*4);
+					if (x < 1000)
+						pType = (int)(Math.random()*3);
+					else
+						pType = (int)(Math.random()*4);
 					lHeight = platformsY.get(platformsY.size()-1);
 					maxT = Math.max((int)(lHeight - JUMPHEIGHT),MAXH);
 					minT = Math.min((int)(lHeight + JUMPHEIGHT),MINH);
