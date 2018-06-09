@@ -187,9 +187,10 @@ public class Krakatoa extends JFrame {
 		    if (isjump){
 				jT = x-jump;
 				if (isfalling)
-					jT += JUMPLENGTH;
-				y = (int)(0.5*G*Math.pow((jT), 2) - V*(jT) + ymin);
-				if (jT < JUMPLENGTH)
+					y = (int) (0.5*G*Math.pow(jT, 2) + ymin);
+				else
+					y = (int)(0.5*G*Math.pow((jT), 2) - V*(jT) + ymin);
+				if (jT < JUMPLENGTH && !isfalling)
 					jframe = (int)Math.floor((double)(jT)/JUMPLENGTH * 8 + 0.03);
 				else
 					jframe = 7;
