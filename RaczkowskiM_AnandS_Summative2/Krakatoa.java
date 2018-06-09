@@ -172,7 +172,10 @@ public class Krakatoa extends JFrame {
 		}
 
 		if (ev.getKeyCode()==10 && screen < 2){
-			screen += 1;
+			if (screen == -1)
+				screen = 2;
+			else
+				screen += 1;
 			x = 0;
 			firstLast = true;
 		}
@@ -363,6 +366,7 @@ public class Krakatoa extends JFrame {
 			gr.setColor(Color.black);
 			gr.setFont(f3);
 			gr.drawString("Press enter to skip.", 10, 500);
+			gr.drawString("Press the up key to jump.", 10, 480);
 			for (int i = 0; i < story.length; i++){
 				if (x >= i*48){
 					if (x >= (i+1)*48)
@@ -378,22 +382,22 @@ public class Krakatoa extends JFrame {
 			gr.setFont(f1);
 			
 			if (x < deathMsg.length())
-				gr.drawString(deathMsg.substring(0,x),0,300);
+				gr.drawString(deathMsg.substring(0,x),0,250);
 			else
-				gr.drawString(deathMsg,0,300);
+				gr.drawString(deathMsg,0,250);
 			gr.setFont(f2);
 			if (x >= deathMsg.length()){
 				if (x-deathMsg.length() < enterMsg.length())
-					gr.drawString(enterMsg.substring(0,x-deathMsg.length()),0,350);
+					gr.drawString(enterMsg.substring(0,x-deathMsg.length()),0,300);
 				else
-					gr.drawString(enterMsg,0,350);
+					gr.drawString(enterMsg,0,300);
 			}
 			gr.setFont(f3);
 			if (x >= deathMsg.length() + enterMsg.length()){
 				if (x - deathMsg.length() - enterMsg.length() + 4 < scoreMsg.length())
-					gr.drawString(scoreMsg.substring(0,x-scoreMsg.length()),0,370);
+					gr.drawString(scoreMsg.substring(0,x-scoreMsg.length()),0,330);
 				else
-					gr.drawString(scoreMsg,0,370);
+					gr.drawString(scoreMsg,0,330);
 			}
 			
 			
