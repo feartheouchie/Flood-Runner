@@ -12,14 +12,13 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class Krakatoa extends JFrame {
-  // private JLabel lbl[][] = new JLabel[10][10];       // number of buttons - can be changed
 
    private Container c;
    private MyPanel mainPanel = new MyPanel();
    private JPanel southPanel = new JPanel();
-   private JButton actionBtn1= new JButton("Jump");     //can change Jump   label on action buttons
-   private JButton actionBtn2 = new JButton("Pause/Continue");      //can change Pause/Continue   label on action buttons
-   private JButton exit = new JButton("Exit");          //label on action buttons
+   private JButton actionBtn1= new JButton("Jump");     //Jump button
+   private JButton actionBtn2 = new JButton("Pause/Continue");      //Pause/Continue button
+   private JButton exit = new JButton("Exit");          //Exit button 
 
 
 	public Krakatoa()   {
@@ -155,15 +154,15 @@ public class Krakatoa extends JFrame {
 	
 	private Timer myTimer= new Timer( 60, this );
 	 
-	public  MyPanel() { 			//initial all the variables
+	public  MyPanel() { 			//initialize all the variables
 
            // Constructor: set background color to white set up listeners to respond to mouse actions
 
 		 
-         setBackground(new Color(248,236,194));				 
-		 addKeyListener(this);	
-         x=0;
-		myTimer.start();
+		setBackground(new Color(248,236,194));				 
+		addKeyListener(this);	
+        x=0;
+  		myTimer.start();
 	}				 
     public void keyPressed( KeyEvent ev ) {
 		if (ev.getKeyCode()==38 && !isjump && screen > 1){
@@ -245,7 +244,7 @@ public class Krakatoa extends JFrame {
 					t = waitTimes[platformsT.get(i)];
 					if (t == 0)
 						t = 600;
-					if (MANX >= x2 && MANX <= x2 + t){
+					if (MANX >= x2 && MANX <= x2 + t || isfalling && MANX + 30 >= x2 && MANX <= x2 + t){
 						yminT = platformsY.get(i);
 						isPlatform = true;
 						break;
@@ -283,7 +282,7 @@ public class Krakatoa extends JFrame {
 			if (!isjump && isfalling)
 				isfalling = false;
 			
-			
+			//Ends the game if you fall below the screen
 			if (y > 700){
 				screen = -1;
 				pType = 4;
