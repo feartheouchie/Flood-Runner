@@ -416,6 +416,5 @@ public class Krakatoa extends JFrame {
 			gr.setFont(f4);
 			gr.drawString("Score: " + x,0,520);
 		}
-
 	}
 }
