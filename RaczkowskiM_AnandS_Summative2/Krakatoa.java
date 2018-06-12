@@ -66,15 +66,15 @@ public class Krakatoa extends JFrame {
 }
  class MyPanel extends JPanel implements ActionListener, KeyListener{
 	//variables - they are all global
-	int x;
-	int jump = 0;
-	int JUMPLENGTH = 20;
-	boolean isjump = false;
+	int x; //timer (count variable)
+	int jump = 0; //Marks the frame when you start jumping
+	int JUMPLENGTH = 20; //Length of the jump animation in frames
+	boolean isjump = false; 
 	boolean isPaused = false;
-	int screen = 0;
-	double speed = 1.5;
+	int screen = 0; 	//Controls whether the main menu, story, or game are up
+	double speed = 1.5;	 	//controls how fast the platforms come at you
 	String storyline = "The year is 1883. You are a Dutch colonist in   #search of precious jewels. The natives of the   #island of Java had told you not to enter        #KRAKATOA, but in your folly and greed, you had  #decided to ignore them. Now, the volcano is     #erupting, and you must escape before it is too  #late. Your chances do not look good...          #Press the up key to jump.                       #Press enter to begin.                           ";
-	String story[] = storyline.split("#");
+	String story[] = storyline.split("#"); 		
 	String deathMsg = "You died";
 	String enterMsg = "Press enter to replay";
 	String scoreMsg = "";
@@ -82,41 +82,38 @@ public class Krakatoa extends JFrame {
 	Font f2 = new Font(Font.MONOSPACED, Font.BOLD, 40);
 	Font f3 = new Font(Font.MONOSPACED, Font.PLAIN, 20);
 	Font f4 = new Font(Font.MONOSPACED, Font.BOLD, 20);
-	int jframe = 0; //#
-	int MAXHEIGHT = 100;
-	int MINHEIGHT = 525;
-	double G = 2;
-	double V = 20;
-	double JUMPHEIGHT = (V*V)/(2*G);
+	int jframe = 0; 	//Shows which frame of the jump you're in
+	int MAXHEIGHT = 100; 	//Maximum height of the screen
+	int MINHEIGHT = 525;	//Minimum height of the screen
+	double G = 2;	//Acceleration caused by gravity
+	double V = 20; 	//Initial y velocity of the jump
+	double JUMPHEIGHT = (V*V)/(2*G); 
 	int VX = (int)(speed*10);
-	
-	int lHeight;
-	int pType = 4;//#
-	int wait = 0; //#
-	int height = 212;//#
-	int MINH = 450;
-	int MAXH = 100;
-	int minT;
-	int maxT;
-	int maxD;
-	
-	
-	int x2 = 0;
-	int MANX = 163;
-	int ymin = 212;
-	int y = ymin;
-	int yminT = ymin;
-	int ylast = y;
-	boolean isPlatform = false;
-	int t = 0;
+	int lHeight; 	//height of current platform (last height) or platform you just jumped off of
+	int pType = 4;	//type of platform 
+	int wait = 0; 	//time between deployment of platforms 
+	int height = 212;	//height of character
+	int MINH = 450;		//Absolute lowest character can go 
+	int MAXH = 100;	 	//Absolute highest character can go 
+	int minT; 			//Lowest character can go this jump
+	int maxT;			//Highest character can go this jump 
+	int maxD;			//Maximum distance between any two platforms 
+	int x2 = 0;			//The x coordinate of the platform above or under the character
+	int MANX = 163;		//x coordinate of the character
+	int ymin = 212;		//Height of the platform character jumped off of 
+	int y = ymin;		//Y coordinate of character
+	int yminT = ymin;	//Height of the platform character is over/under
+	int ylast = y;		//Previous y coordinate of the character
+	boolean isPlatform = false;		//Determines whether or not the character is on a platform
+	int t = 0; 			//Length of platform 
 	boolean isfalling = false;
-	int jT = 0;
-	boolean firstLast = true;
-	int score = 0;
-	int hScore = 0;
-	int[] waitTimes = new int[]{241,304,179,106,0};
+	int jT = 0; 		//Jump Time — how many frames the character has been in the jump for
+	boolean firstLast = true;  		//Chacks if it's the first frame of the last screen 
+	int score = 0;		
+	int hScore = 0;		//High score
+	int[] waitTimes = new int[]{241,304,179,106,0}; 	//Length of platforms. Alternatively, how long to wait before next platform
 	
-	int[] tempList = new int[3];
+	//Sprites
 	ImageIcon pic = new ImageIcon("background2.gif");
 	ImageIcon [] jogger = {
 		new ImageIcon("Jogging01.png"),
@@ -147,6 +144,9 @@ public class Krakatoa extends JFrame {
 		new ImageIcon("Platform3.png"),
 		new ImageIcon("PlatformL.png")
 	};
+	// </Sprites>
+	
+	//Platform lists
 	ArrayList <Integer> platformsT = new ArrayList<Integer>();
 	ArrayList <Integer> platformsX = new ArrayList<Integer>();
 	ArrayList <Integer> platformsY = new ArrayList<Integer>();
@@ -154,6 +154,8 @@ public class Krakatoa extends JFrame {
 	
 	private Timer myTimer= new Timer( 60, this );
 	 
+	 
+	//Sets panel size
 	public  MyPanel() { 			//initialize all the variables
 
            // Constructor: set background color to white set up listeners to respond to mouse actions
@@ -163,13 +165,20 @@ public class Krakatoa extends JFrame {
 		addKeyListener(this);	
         x=0;
   		myTimer.start();
-	}				 
+	}
+
+	
+	
+	
     public void keyPressed( KeyEvent ev ) {
+		
+		// jump when up key pressed
 		if (ev.getKeyCode()==38 && !isjump && screen > 1){
 			isjump = true;
 			jump = x;
 		}
 
+		//changes screen
 		if (ev.getKeyCode()==10 && screen < 2){
 			if (screen == -1)
 				screen = 2;
@@ -184,20 +193,26 @@ public class Krakatoa extends JFrame {
     public void keyTyped( KeyEvent e ){}
 	
     public void actionPerformed( ActionEvent e ){ 
+	
+		//timer events
         if (e.getSource()==myTimer){
 			x++;
+			
+			//calculates next frame of jump
 		    if (isjump){
 				jT = x-jump;
+				
+
 				if (isfalling)
 					y = (int) (0.5*G*Math.pow(jT, 2) + ymin);
 				else
 					y = (int)(0.5*G*Math.pow((jT), 2) - V*(jT) + ymin);
+				
 				if (jT < JUMPLENGTH && !isfalling)
 					jframe = (int)Math.floor((double)(jT)/JUMPLENGTH * 8 + 0.03);
 				else
 					jframe = 7;
 				}
-		// timer events
 			repaint();
 
 			if (screen > 1){
