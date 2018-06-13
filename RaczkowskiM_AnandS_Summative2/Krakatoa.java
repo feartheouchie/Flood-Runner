@@ -66,14 +66,14 @@ public class Krakatoa extends JFrame {
 }
  class MyPanel extends JPanel implements ActionListener, KeyListener{
 	//variables - they are all global
-	int x; //timer (count variable)
+	int count; //timer (count variable)
 	int jump = 0; //Marks the frame when you start jumping
 	int JUMPLENGTH = 20; //Length of the jump animation in frames
 	boolean isjump = false; 
 	boolean isPaused = false;
-	int screen = 0; 	//Controls whether the main menu, story, or game are up
-	double speed = 1.35;	 	//coefficient that controls how fast the platforms come at you
-	String storyline = "The year is 1883. You are a Dutch colonist in   #search of precious jewels. The natives of the   #island of Java had told you not to enter        #KRAKATOA, but in your folly and greed, you had  #decided to ignore them. Now, the volcano is     #erupting, and you must escape before it is too  #late. Your chances do not look good...          #Press the up key to jump.                       #Press enter to begin.                           ";
+	int screen = 0; 	//Controls whether the main menu, story, or game are up; 0 = main menu, 1 = instructions, 2 and up is the game
+	double speed = 1.4;	 	//coefficient that controls how fast the platforms come at you
+	String storyline = "The year is 1883. You are a Dutch colonist in   #search of precious jewels. The natives of the   #island of Java had told you not to enter        #KRAKATOA, but in your folly and greed, you had  #decided to ignore them. Now, the volcano is     #erupting, and you must escape before it is too  #late. Your chances do not look good...                    #Press enter to begin.                           ";
 	String story[] = storyline.split("#"); 		
 	String deathMsg = "You died";
 	String enterMsg = "Press enter to replay";
@@ -90,7 +90,7 @@ public class Krakatoa extends JFrame {
 	double JUMPHEIGHT = (V*V)/(2*G); 
 	int VX = (int)(speed*10);
 	int lHeight; 	//height of current platform (last height) or platform you just jumped off of
-	int pType = 4;	//type of platform 
+	int pType = 3;	//type of platform 
 	int wait = 0; 	//time between deployment of platforms 
 	int height = 212;	//platform height
 	int MINH = 450;		//Absolute lowest character can go 
@@ -98,8 +98,8 @@ public class Krakatoa extends JFrame {
 	int minT; 			//Lowest character can go this jump
 	int maxT;			//Highest character can go this jump 
 	int maxD;			//Maximum distance between any two platforms
-	int x2 = 0;			//The x coordinate of the platform above or under the character
-	int MANX = 150;		//x coordinate of the character
+	int x2 = 0;			//The count coordinate of the platform above or under the character
+	int MANX = 152;		//count coordinate of the character
 	int ymin = 212;		//Height of the platform character jumped off of 
 	int y = ymin;		//Y coordinate of character
 	int yminT = ymin;	//Height of the platform character is over/under
@@ -111,7 +111,7 @@ public class Krakatoa extends JFrame {
 	boolean firstLast = true;  		//Checks if it's the first frame of the last screen 
 	int score = 0;		
 	int hScore = 0;		//High score
-	int[] waitTimes = new int[]{241,304,179,106,0}; 	//Length of platforms. Alternatively, how long to wait before next platform
+	int[] waitTimes = new int[]{241,304,179,0}; 	//Length of platforms. Alternatively, how long to wait before next platform
 
 	//<Sprites>
 	ImageIcon background = new ImageIcon("background2.gif");
@@ -141,7 +141,6 @@ public class Krakatoa extends JFrame {
 		new ImageIcon("Platform1.png"),
 		new ImageIcon("Platform2.png"),
 		new ImageIcon("Platform4.png"),
-		new ImageIcon("Platform3.png"),
 		new ImageIcon("PlatformL.png")
 	};
 	// </Sprites>
@@ -163,7 +162,7 @@ public class Krakatoa extends JFrame {
 		 
 		setBackground(new Color(248,236,194));				 
 		addKeyListener(this);	
-        x=0;
+        count=0;
   		myTimer.start();
 	}
 
@@ -175,7 +174,7 @@ public class Krakatoa extends JFrame {
 		// jump when up key pressed
 		if (ev.getKeyCode()==38 && !isjump && screen > 1){
 			isjump = true;
-			jump = x;
+			jump = count;
 		}
 
 		//changes screen
@@ -184,7 +183,7 @@ public class Krakatoa extends JFrame {
 				screen = 2;
 			else
 				screen += 1;
-			x = 0;
+			count = 0;
 			firstLast = true;
 		}
 	}	
@@ -196,13 +195,16 @@ public class Krakatoa extends JFrame {
 	
 		//timer events
         if (e.getSource()==myTimer){
-			x++;
+			
+			//Increment variables
+			count++;
 			if (screen > 1)		
-				speed += 0.00025;
+				speed += 0.000275;
+			score = count;
 			
 			//calculates next frame of jump
 		    if (isjump){
-				jT = x-jump;
+				jT = count-jump;
 				
 
 				if (isfalling)
@@ -222,16 +224,13 @@ public class Krakatoa extends JFrame {
 					wait = 0;
 					platformsT.add(pType);
 					
-					if (pType == 4)
+					if (pType == 3)
 						platformsX.add(0);
 					else
 						platformsX.add((int)(600 + speed*10));
 					platformsY.add(height);
 					wait += waitTimes[pType];
-					if (x < 1000)
-						pType = (int)(Math.random()*3);
-					else
-						pType = (int)(Math.random()*4);
+					pType = (int)(Math.random()*3);
 					lHeight = platformsY.get(platformsY.size()-1);
 					maxT = Math.max((int)(lHeight - JUMPHEIGHT),MAXH);
 					minT = Math.min((int)(lHeight + JUMPHEIGHT),MINH);
@@ -261,7 +260,7 @@ public class Krakatoa extends JFrame {
 					t = waitTimes[platformsT.get(i)];
 					if (t == 0)
 						t = 600;
-					if (MANX + 50 >= x2 && MANX <= x2 + t){
+					if (MANX + 53 >= x2 && MANX <= x2 + t){ //The + 52 is there to offest the fact that MANX is the left side of the character.
 						yminT = platformsY.get(i);
 						isPlatform = true;
 						break;
@@ -277,7 +276,7 @@ public class Krakatoa extends JFrame {
 				if (y < yminT)
 					isjump = true;
 				else{
-					if (ylast <= yminT){
+					if (ylast - 15 <= yminT){ //15 is just an arbitrary number to make the hitbox feel more like the character itself
 						isjump = false;
 						ymin = yminT;
 						y = yminT;
@@ -293,7 +292,7 @@ public class Krakatoa extends JFrame {
 				isfalling = true;
 				isjump = true;
 				ymin = y;
-				jump = x;
+				jump = count;
 			}
 			
 			if (!isjump && isfalling)
@@ -313,7 +312,7 @@ public class Krakatoa extends JFrame {
 			JButton b= (JButton)e.getSource();	   
 			if (b.getText()=="Jump" && !isjump && screen > 1){
 			    isjump = true;
-				jump = x;
+				jump = count;
 			}
 			else if (b.getText()=="Pause/Continue"){
 				if (isPaused){
@@ -334,21 +333,20 @@ public class Krakatoa extends JFrame {
 	//Resets variables after you die
 	public void endGame(){
 		screen = -1;
-		pType = 4;
+		pType = 3;
 		wait = 0;
 		height = 212;
 		ymin = 212;
 		y = ymin;
 		yminT = ymin;
 		ylast = y;
-		speed = 1.35;
+		speed = 1.4;
 		platformsT.clear();
 		platformsX.clear();
 		platformsY.clear();
 		isjump = false;
 		if (firstLast){
-			score = x;
-			x = 0;
+			count = 0;
 			if (score > hScore)
 				hScore = score;
 			scoreMsg = "Score: " + score + " High Score: " + hScore;
@@ -365,53 +363,58 @@ public class Krakatoa extends JFrame {
 		gr.setFont(f1);
 		
 		if (screen == 0){
-			gr.drawImage(background.getImage(),600-(x+1656)*5%3312, 0, null );
-			gr.drawImage(background.getImage(),600-x*5%3312, 0, null );
+			gr.drawImage(background.getImage(),600-(count+1656)*5%3312, 0, null );
+			gr.drawImage(background.getImage(),600-count*5%3312, 0, null );
 			gr.setColor(Color.white);
 			gr.setFont(f1);
 			gr.drawString("KRAKATOA",0,100);
 			gr.setFont(f2);
 			gr.drawString("West of Java",0,150);
-			if (x%10 < 5){
+			if (count%10 < 5){
 				gr.setColor(Color.blue);
 				gr.drawString("Press enter to start",0,500);
 			}
 		}
 		
+		
 		else if (screen == 1) {
 			gr.setColor(Color.black);
+			gr.setFont(f4);
+			gr.drawString("Instructions:", 10, 450);
 			gr.setFont(f3);
-			gr.drawString("Press enter to skip.", 10, 500);
-			gr.drawString("Press the up key to jump.", 10, 480);
+			gr.drawString("Press enter to skip.", 10, 420);
+			gr.drawString("Press the up key to jump.", 10, 470);
+			gr.drawString("Try to survive for as long as you can!", 10, 490);
 			for (int i = 0; i < story.length; i++){
-				if (x >= i*48){
-					if (x >= (i+1)*48)
+				if (count >= i*48){
+					if (count >= (i+1)*48)
 						gr.drawString(story[i], 0, 20*(i+1));
 					else
-						gr.drawString(story[i].substring(0,x%48), 0, 20*(i+1));
+						gr.drawString(story[i].substring(0,count%48), 0, 20*(i+1));
 				}
 			}
 		}
 		
+		//Death screen
 		else if (screen == -1){
 			gr.setColor(Color.black);
 			gr.setFont(f1);
 			
-			if (x < deathMsg.length())
-				gr.drawString(deathMsg.substring(0,x),0,250);
+			if (count < deathMsg.length())
+				gr.drawString(deathMsg.substring(0,count),0,250);
 			else
 				gr.drawString(deathMsg,0,250);
 			gr.setFont(f2);
-			if (x >= deathMsg.length()){
-				if (x-deathMsg.length() < enterMsg.length())
-					gr.drawString(enterMsg.substring(0,x-deathMsg.length()),0,300);
+			if (count >= deathMsg.length()){
+				if (count-deathMsg.length() < enterMsg.length())
+					gr.drawString(enterMsg.substring(0,count-deathMsg.length()),0,300);
 				else
 					gr.drawString(enterMsg,0,300);
 			}
 			gr.setFont(f3);
-			if (x >= deathMsg.length() + enterMsg.length()){
-				if (x - deathMsg.length() - enterMsg.length() + 4 < scoreMsg.length())
-					gr.drawString(scoreMsg.substring(0,x-scoreMsg.length()),0,330);
+			if (count >= deathMsg.length() + enterMsg.length()){
+				if (count - deathMsg.length() - enterMsg.length() + 4 < scoreMsg.length())
+					gr.drawString(scoreMsg.substring(0,count-scoreMsg.length()),0,330);
 				else
 					gr.drawString(scoreMsg,0,330);
 			}
@@ -419,20 +422,23 @@ public class Krakatoa extends JFrame {
 			
 		}
 		else{
-			gr.drawImage(background.getImage(),(int)Math.floor(600-(x*speed/2+1656)*5%3312), 0, null );
-			gr.drawImage(background.getImage(),(int)Math.floor(600-x*speed/2*5%3312), 0, null );
+			gr.drawImage(background.getImage(),(int)Math.floor(600-(count*speed/2+1656)*5%3312), 0, null );
+			gr.drawImage(background.getImage(),(int)Math.floor(600-count*speed/2*5%3312), 0, null );
 			gr.setColor(Color.blue);
 			for(int i = 0; i < platformsX.size(); i++)
 				gr.drawImage(platformSprites[platformsT.get(i)].getImage(), platformsX.get(i), platformsY.get(i), null);
 			gr.setFont(f1);
 			if (!isjump)
-				gr.drawImage(jogger[x%8+1].getImage(),120,y-88,null);
+				gr.drawImage(jogger[count%8+1].getImage(),120,y-88,null);
 			else
 				gr.drawImage(jumping[jframe].getImage(),120,y-88,null);
 			gr.setColor(Color.white);
 			gr.setFont(f4);
-			gr.drawString("Score: " + x,0,520);
-			gr.drawString("High Score: " + hScore, 378, 515);
+			gr.drawString("Score: " + score,0,520);
+			if (score < hScore)
+				gr.drawString("High Score: " + hScore, 378, 515);
+			else
+				gr.drawString("High Score: " + score, 378, 515);
 		}
 	}
 }
