@@ -71,7 +71,7 @@ public class Krakatoa extends JFrame {
 	int JUMPLENGTH = 20; //Length of the jump animation in frames
 	boolean isjump = false; 
 	boolean isPaused = false;
-	int screen = 0; 	//Controls whether the main menu, story, or game are up; 0 = main menu, 1 = instructions, 2 and up is the game
+	int screen = 0; 	//Controls whether the main menu, story, or game are up; 0 = title screen, 1 = instructions, 2 and up is the game
 	double speed = 1.4;	 	//coefficient that controls how fast the platforms come at you
 	String storyline = "The year is 1883. You are a Dutch colonist in   #search of precious jewels. The natives of the   #island of Java had told you not to enter        #KRAKATOA, but in your folly and greed, you had  #decided to ignore them. Now, the volcano is     #erupting, and you must escape before it is too  #late. Your chances do not look good...                    #Press enter to begin.                           ";
 	String story[] = storyline.split("#"); 		
@@ -218,7 +218,7 @@ public class Krakatoa extends JFrame {
 					jframe = 7;
 				}
 			repaint();
-
+			
 			if (screen > 1){
 				if(wait <= 0){
 					wait = 0;
@@ -362,6 +362,7 @@ public class Krakatoa extends JFrame {
 		gr.setColor(Color.pink);
 		gr.setFont(f1);
 		
+		//Title screen
 		if (screen == 0){
 			gr.drawImage(background.getImage(),600-(count+1656)*5%3312, 0, null );
 			gr.drawImage(background.getImage(),600-count*5%3312, 0, null );
@@ -376,7 +377,7 @@ public class Krakatoa extends JFrame {
 			}
 		}
 		
-		
+		//Instructions/story screen
 		else if (screen == 1) {
 			gr.setColor(Color.black);
 			gr.setFont(f4);
