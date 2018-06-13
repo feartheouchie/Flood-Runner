@@ -72,7 +72,7 @@ public class Krakatoa extends JFrame {
 	boolean isjump = false; 
 	boolean isPaused = false;
 	int screen = 0; 	//Controls whether the main menu, story, or game are up
-	double speed = 1.5;	 	//controls how fast the platforms come at you
+	double speed = 1.35;	 	//coefficient that controls how fast the platforms come at you
 	String storyline = "The year is 1883. You are a Dutch colonist in   #search of precious jewels. The natives of the   #island of Java had told you not to enter        #KRAKATOA, but in your folly and greed, you had  #decided to ignore them. Now, the volcano is     #erupting, and you must escape before it is too  #late. Your chances do not look good...          #Press the up key to jump.                       #Press enter to begin.                           ";
 	String story[] = storyline.split("#"); 		
 	String deathMsg = "You died";
@@ -97,9 +97,9 @@ public class Krakatoa extends JFrame {
 	int MAXH = 100;	 	//Absolute highest character can go 
 	int minT; 			//Lowest character can go this jump
 	int maxT;			//Highest character can go this jump 
-	int maxD;			//Maximum distance between any two platforms 
+	int maxD;			//Maximum distance between any two platforms
 	int x2 = 0;			//The x coordinate of the platform above or under the character
-	int MANX = 163;		//x coordinate of the character
+	int MANX = 150;		//x coordinate of the character
 	int ymin = 212;		//Height of the platform character jumped off of 
 	int y = ymin;		//Y coordinate of character
 	int yminT = ymin;	//Height of the platform character is over/under
@@ -108,13 +108,13 @@ public class Krakatoa extends JFrame {
 	int t = 0; 			//Length of platform 
 	boolean isfalling = false;
 	int jT = 0; 		//Jump Time — how many frames the character has been in the jump for
-	boolean firstLast = true;  		//Chacks if it's the first frame of the last screen 
+	boolean firstLast = true;  		//Checks if it's the first frame of the last screen 
 	int score = 0;		
 	int hScore = 0;		//High score
 	int[] waitTimes = new int[]{241,304,179,106,0}; 	//Length of platforms. Alternatively, how long to wait before next platform
 
 	//<Sprites>
-	ImageIcon pic = new ImageIcon("background2.gif");
+	ImageIcon background = new ImageIcon("background2.gif");
 	ImageIcon [] jogger = {
 		new ImageIcon("Jogging01.png"),
 		new ImageIcon("Jogging06.png"),
@@ -197,6 +197,8 @@ public class Krakatoa extends JFrame {
 		//timer events
         if (e.getSource()==myTimer){
 			x++;
+			if (screen > 1)		
+				speed += 0.00025;
 			
 			//calculates next frame of jump
 		    if (isjump){
@@ -234,7 +236,7 @@ public class Krakatoa extends JFrame {
 					maxT = Math.max((int)(lHeight - JUMPHEIGHT),MAXH);
 					minT = Math.min((int)(lHeight + JUMPHEIGHT),MINH);
 					height = (int)(Math.random()*(minT-maxT))+maxT;
-					maxD = (int)(VX * (  ( V + (int)Math.sqrt(V*V - 2*G*height) ) / G  ) );
+					maxD = (int)(speed * VX * (  ( V + (int)Math.sqrt(V*V - 2*G*height) ) / G  ) );
 					wait += (int)(Math.random()*maxD);
 					
 				}
@@ -259,7 +261,7 @@ public class Krakatoa extends JFrame {
 					t = waitTimes[platformsT.get(i)];
 					if (t == 0)
 						t = 600;
-					if (MANX + 45 >= x2 && MANX <= x2 + t){
+					if (MANX + 50 >= x2 && MANX <= x2 + t){
 						yminT = platformsY.get(i);
 						isPlatform = true;
 						break;
@@ -339,6 +341,7 @@ public class Krakatoa extends JFrame {
 		y = ymin;
 		yminT = ymin;
 		ylast = y;
+		speed = 1.35;
 		platformsT.clear();
 		platformsX.clear();
 		platformsY.clear();
@@ -362,8 +365,8 @@ public class Krakatoa extends JFrame {
 		gr.setFont(f1);
 		
 		if (screen == 0){
-			gr.drawImage(pic.getImage(),600-(x+1656)*5%3312, 0, null );
-			gr.drawImage(pic.getImage(),600-x*5%3312, 0, null );
+			gr.drawImage(background.getImage(),600-(x+1656)*5%3312, 0, null );
+			gr.drawImage(background.getImage(),600-x*5%3312, 0, null );
 			gr.setColor(Color.white);
 			gr.setFont(f1);
 			gr.drawString("KRAKATOA",0,100);
@@ -416,8 +419,8 @@ public class Krakatoa extends JFrame {
 			
 		}
 		else{
-			gr.drawImage(pic.getImage(),(int)Math.floor(600-(x*speed/2+1656)*5%3312), 0, null );
-			gr.drawImage(pic.getImage(),(int)Math.floor(600-x*speed/2*5%3312), 0, null );
+			gr.drawImage(background.getImage(),(int)Math.floor(600-(x*speed/2+1656)*5%3312), 0, null );
+			gr.drawImage(background.getImage(),(int)Math.floor(600-x*speed/2*5%3312), 0, null );
 			gr.setColor(Color.blue);
 			for(int i = 0; i < platformsX.size(); i++)
 				gr.drawImage(platformSprites[platformsT.get(i)].getImage(), platformsX.get(i), platformsY.get(i), null);
