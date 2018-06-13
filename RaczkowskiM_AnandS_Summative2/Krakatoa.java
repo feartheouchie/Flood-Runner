@@ -92,7 +92,7 @@ public class Krakatoa extends JFrame {
 	int lHeight; 	//height of current platform (last height) or platform you just jumped off of
 	int pType = 4;	//type of platform 
 	int wait = 0; 	//time between deployment of platforms 
-	int height = 212;	//height of character
+	int height = 212;	//platform height
 	int MINH = 450;		//Absolute lowest character can go 
 	int MAXH = 100;	 	//Absolute highest character can go 
 	int minT; 			//Lowest character can go this jump
@@ -104,7 +104,7 @@ public class Krakatoa extends JFrame {
 	int y = ymin;		//Y coordinate of character
 	int yminT = ymin;	//Height of the platform character is over/under
 	int ylast = y;		//Previous y coordinate of the character
-	boolean isPlatform = false;		//Determines whether or not the character is on a platform
+	boolean isPlatform = false;		//Determines whether or not the character is above a platform
 	int t = 0; 			//Length of platform 
 	boolean isfalling = false;
 	int jT = 0; 		//Jump Time — how many frames the character has been in the jump for
@@ -112,8 +112,8 @@ public class Krakatoa extends JFrame {
 	int score = 0;		
 	int hScore = 0;		//High score
 	int[] waitTimes = new int[]{241,304,179,106,0}; 	//Length of platforms. Alternatively, how long to wait before next platform
-	
-	//Sprites
+
+	//<Sprites>
 	ImageIcon pic = new ImageIcon("background2.gif");
 	ImageIcon [] jogger = {
 		new ImageIcon("Jogging01.png"),
@@ -259,7 +259,7 @@ public class Krakatoa extends JFrame {
 					t = waitTimes[platformsT.get(i)];
 					if (t == 0)
 						t = 600;
-					if (MANX >= x2 && MANX <= x2 + t || isfalling && MANX + 30 >= x2 && MANX <= x2 + t){
+					if (MANX + 45 >= x2 && MANX <= x2 + t){
 						yminT = platformsY.get(i);
 						isPlatform = true;
 						break;
@@ -287,7 +287,7 @@ public class Krakatoa extends JFrame {
 				
 				ylast = y;
 			}
-			if (!isjump && y != yminT && screen > 1 && !isfalling){
+			if (!isjump && y != yminT  && !isfalling && screen > 1){
 				isfalling = true;
 				isjump = true;
 				ymin = y;
@@ -299,33 +299,10 @@ public class Krakatoa extends JFrame {
 			
 			//Ends the game if you fall below the screen
 			if (y > 700){
-				screen = -1;
-				pType = 4;
-				wait = 0;
-				height = 212;
-				ymin = 212;
-				y = ymin;
-				yminT = ymin;
-				ylast = y;
-				platformsT.clear();
-				platformsX.clear();
-				platformsY.clear();
-				isjump = false;
-				if (firstLast){
-					score = x;
-					x = 0;
-					if (score > hScore)
-						hScore = score;
-					scoreMsg = "Score: " + score + " High Score: " + hScore;
-					firstLast = false;
-				}
+				endGame();
 			}
 			
-			
-			
 		}
-
-
 
 		
 		
@@ -352,7 +329,29 @@ public class Krakatoa extends JFrame {
 		}	   
     }
 	
-	
+	//Resets variables after you die
+	public void endGame(){
+		screen = -1;
+		pType = 4;
+		wait = 0;
+		height = 212;
+		ymin = 212;
+		y = ymin;
+		yminT = ymin;
+		ylast = y;
+		platformsT.clear();
+		platformsX.clear();
+		platformsY.clear();
+		isjump = false;
+		if (firstLast){
+			score = x;
+			x = 0;
+			if (score > hScore)
+				hScore = score;
+			scoreMsg = "Score: " + score + " High Score: " + hScore;
+			firstLast = false;
+		}
+	}
 	// end actionPerformed
 	
 	
@@ -430,6 +429,7 @@ public class Krakatoa extends JFrame {
 			gr.setColor(Color.white);
 			gr.setFont(f4);
 			gr.drawString("Score: " + x,0,520);
+			gr.drawString("High Score: " + hScore, 378, 515);
 		}
 	}
 }
