@@ -45,7 +45,8 @@ public class Krakatoa extends JFrame {
 
 		c.add( southPanel, BorderLayout.SOUTH );
 		c.add( mainPanel, BorderLayout.CENTER  );
-		setSize( 600, 600 );                          //size of the window, can be changed
+		setSize( 600, 600 );		//size of the window, can be changed
+		setResizable(false);
 		setVisible(true);
    }
 
@@ -260,7 +261,7 @@ public class Krakatoa extends JFrame {
 					t = waitTimes[platformsT.get(i)];
 					if (t == 0)
 						t = 600;
-					if (MANX + 53 >= x2 && MANX <= x2 + t){ //The + 52 is there to offest the fact that MANX is the left side of the character.
+					if (MANX + 53 >= x2 && MANX <= x2 + t){ //The + 52 is there to offset the fact that MANX is the left side of the character.
 						yminT = platformsY.get(i);
 						isPlatform = true;
 						break;
@@ -320,8 +321,8 @@ public class Krakatoa extends JFrame {
 					isPaused = false;
 				}
 				else{
-					myTimer.stop();
 					isPaused = true;
+					myTimer.stop();
 				}
 			}
 			else if (b.getText()=="Exit"){
@@ -422,6 +423,7 @@ public class Krakatoa extends JFrame {
 			
 			
 		}
+		//Game screen
 		else{
 			gr.drawImage(background.getImage(),(int)Math.floor(600-(count*speed/2+1656)*5%3312), 0, null );
 			gr.drawImage(background.getImage(),(int)Math.floor(600-count*speed/2*5%3312), 0, null );
